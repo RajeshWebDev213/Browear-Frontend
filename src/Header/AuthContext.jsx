@@ -5,13 +5,20 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // 🔥 Restore user from localStorage on refresh
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
+  
+useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+
+  if (storedUser && storedUser !== "undefined") {
+    try {
       setUser(JSON.parse(storedUser));
+    } catch (error) {
+      console.log("Invalid user in localStorage");
+      localStorage.removeItem("user");
     }
-  }, []);
+  }
+}, []);
+
 
   const login = (userData) => {
     setUser(userData);
