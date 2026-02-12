@@ -48,7 +48,7 @@ function Signup() {
             Signup to <span className="font-extrabold">BROWEAR</span>
           </h1>
           <img
-            src="../public/browear-1.png"
+            src="/browear-1.png"
             className="w-12 sm:w-16"
             alt="logo"
           />
