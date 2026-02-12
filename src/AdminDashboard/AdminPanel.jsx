@@ -178,7 +178,7 @@ function Users() {
   const { user } = useContext(AuthContext);
 
   const token = localStorage.getItem("token");
-   console.log("Total users : ", user.length)
+   
   if (!user || !token) {
     return <p className="text-red-500">Unauthorized</p>;
   }
@@ -308,7 +308,7 @@ function Orders() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ IMPORTANT
+            Authorization: `Bearer ${token}`, 
           },
            
         });

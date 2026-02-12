@@ -64,7 +64,7 @@ function Login() {
             Login to <span className="font-extrabold">BROWEAR</span>
           </h1>
           <img
-            src="/browear-1.png"  // ✅ FIXED: Remove ../public/
+            src="../public/browear-1.png" 
             className="w-12 sm:w-16"
             alt="logo"
           />

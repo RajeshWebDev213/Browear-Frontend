@@ -13,7 +13,7 @@
     },
      {
         id:3,
-        img:'./public/Collection/Shoes.jpeg',
+        img:'/Collection/Shoes.jpeg',
         name : "Shoes",
         link:"/footwear"
     }
