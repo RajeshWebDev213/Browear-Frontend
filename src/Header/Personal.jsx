@@ -75,6 +75,7 @@ const res = await fetch("https://browear-backend-production.up.railway.app/api/a
           <label>
             Full Name
             <input
+            id="name"
               value={fullname}
               onChange={(e) => setFullName(e.target.value)}
               className="w-full h-10 border px-2"
@@ -86,6 +87,7 @@ const res = await fetch("https://browear-backend-production.up.railway.app/api/a
           <label>
             Gender
             <select
+            id="gender"
               value={gender}
               onChange={(e) => setGender(e.target.value)}
               className="w-full h-10 border px-2"
@@ -101,6 +103,7 @@ const res = await fetch("https://browear-backend-production.up.railway.app/api/a
           <label>
             DOB
             <input
+            id="dob"
               type="date"
               value={dob}
               onChange={(e) => setDob(e.target.value)}
@@ -112,6 +115,7 @@ const res = await fetch("https://browear-backend-production.up.railway.app/api/a
           <label>
             Phone
             <input
+            id="dob"
               value={phonenumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
               className="w-full h-10 border px-2"

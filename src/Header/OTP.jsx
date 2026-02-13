@@ -79,6 +79,7 @@ function OTP() {
 
         <form onSubmit={verifyOTP} className="flex flex-col gap-5 mt-6">
           <input
+           id="otp"
             type="text"
             placeholder="Enter OTP"
             maxLength={6}

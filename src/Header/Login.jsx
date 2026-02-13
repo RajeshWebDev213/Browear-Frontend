@@ -85,6 +85,7 @@ function Login() {
 
         <form className="flex flex-col gap-5 mt-6" onSubmit={HandleLogin}>
           <input
+          id="emailbox"
             type="email"
             placeholder="Enter your email"
             className="w-full h-10 bg-white outline-none border-2 border-blue-950 rounded px-2 focus:ring-2 focus:ring-blue-400"
@@ -94,6 +95,7 @@ function Login() {
           />
 
           <input
+          id="password"
             type="password"
             placeholder="Enter your password"
             className="w-full h-10 bg-white outline-none border-2 border-blue-950 rounded px-2 focus:ring-2 focus:ring-blue-400"
