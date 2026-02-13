@@ -10,7 +10,7 @@ function Signup() {
 
   const sendOTP = async(e) => {
     e.preventDefault();
-
+    
     if (!email || !password) {
       setError("Email and password are required");
       return;
@@ -23,8 +23,13 @@ function Signup() {
         },
         body:JSON.stringify({email:email,password:password})
       });
-      const data = await res.JSON;
+      const data = await res.json();
+      if (!res.ok) {
+  alert(data.message || "Something went wrong");
+  return;
+}
       if(res.ok){
+        console.log("OTP Sent")
         localStorage.setItem("otpAccess", "true");
         navigate("/OTP",{state: {email,password}})
         console.log("Hello")
@@ -65,6 +70,7 @@ function Signup() {
           className="flex flex-col gap-5 mt-6"
         >
           <input
+            id="emailbox"
             type="email"
             placeholder="Enter your email"
             className="w-full h-10 border-2 border-blue-950 rounded px-2 outline-none focus:ring-2 focus:ring-blue-400"
@@ -73,6 +79,7 @@ function Signup() {
           />
 
           <input
+            id="password"
             type="password"
             placeholder="Set your password"
             className="w-full h-10 border-2 border-blue-950 rounded px-2 outline-none focus:ring-2 focus:ring-blue-400"

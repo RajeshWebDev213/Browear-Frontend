@@ -29,7 +29,10 @@ function Login() {
       const data = await res.json(); 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      
+       if (!res.ok) {
+  alert(data.message || "Something went wrong");
+  return;
+}
       if (res.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
         login(data.user);
