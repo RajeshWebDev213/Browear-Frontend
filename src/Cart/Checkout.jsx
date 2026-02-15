@@ -9,7 +9,7 @@ const Checkout = () => {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const navigate = useNavigate()
-     // Calculations
+    
   const subtotal = cartItems.reduce(
     (sum, item) => sum + Number(item.price) * item.quantity,
     0
@@ -42,8 +42,6 @@ const Checkout = () => {
     }
      
      const token = localStorage.getItem("token");
-     console.log("TOKEN IN CHECKOUT:", localStorage.getItem("token"));
-     console.log("CHECKOUT TOKEN:", token);
       if (!token) {
         alert("Session expired. Please signup again.");
         navigate("/Login");
@@ -74,9 +72,6 @@ console.log("ORDER RESPONSE:", data);
     console.error("Order failed");
     return;
   } 
-
-
-
 
     const newOrder = {
     id: Date.now(),
