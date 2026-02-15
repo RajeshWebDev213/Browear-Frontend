@@ -72,7 +72,7 @@ function ProfileInfo() {
       </h2>
       
       <p>
-        <b>Name:</b> {user?.fullname || "Not provided"}
+        <b>Name:</b> {user?.username || "Not provided"}
       </p>
 
       <p>
