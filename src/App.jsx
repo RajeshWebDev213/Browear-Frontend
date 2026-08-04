@@ -57,6 +57,9 @@ import AdminLayout from "./layouts/AdminLayout";
 import AdminRoute from "./routes/AdminRoute";
 
 import Dashboard from "./Pages/Admin/Dashboard";
+import Products from "./Pages/Admin/Products";
+import AddProduct from "./Pages/Admin/AddProduct";
+import EditProduct from "./Pages/Admin/EditProduct";
 function App() {
   return (
     <Routes>
@@ -209,6 +212,20 @@ function App() {
   />
 
 </Route>
+<Route
+  path="/admin/products"
+  element={<Products />}
+/>
+
+<Route
+  path="/admin/products/add"
+  element={<AddProduct />}
+/>
+
+<Route
+  path="/admin/products/edit/:id"
+  element={<EditProduct />}
+/>
       {/* ==========================================
           404
       ========================================== */}

@@ -35,6 +35,13 @@ import {
   getRecentOrders,
 } from "../../services/dashboardService";
 
+import UsersTable
+from "../../components/admin/UsersTable";
+
+import {
+  getRecentUsers,
+} from "../../services/dashboardService";
+
 import Loader from "../../components/common/Loader";
 function Dashboard() {
 const [overview, setOverview] = useState(null);
@@ -44,6 +51,8 @@ const [recentOrders, setRecentOrders] =
 useState([]);
 const [loading, setLoading] =
 useState(true);
+const [recentUsers, setRecentUsers] =
+useState([]);
 const [monthlySales, setMonthlySales] =
 useState([]);
 const [orderStatus, setOrderStatus] =
@@ -74,6 +83,10 @@ const orders =
 await getRecentOrders();
 
 setRecentOrders(orders);
+const users =
+await getRecentUsers();
+
+setRecentUsers(users);
 
     } catch (error) {
 
@@ -306,20 +319,9 @@ if (loading) {
             Recent Users
 
           </h2>
-
-          <div
-            className="
-            h-48
-            flex
-            items-center
-            justify-center
-            text-gray-400
-            "
-          >
-
-            No Users
-
-          </div>
+<UsersTable
+    users={recentUsers}
+/>
 
         </div>
 
