@@ -67,7 +67,7 @@ const shouldShowHeader = !hideHeaderRoutes.some(route =>
           <Route path="/adminpanel" element={<AdminDashboard/>}/>
         </Routes>
       </main>
-
+     {/* <AdminDashboard/> */}
       {/* FOOTER */}
       {shouldShowHeader && <Footer />}
     </div>
