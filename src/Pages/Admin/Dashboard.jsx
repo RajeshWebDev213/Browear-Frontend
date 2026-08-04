@@ -7,9 +7,61 @@ import {
 } from "lucide-react";
 
 import DashboardCard from "../../components/admin/DashboardCard";
+import { useEffect, useState } from "react";
 
+import {
+  getDashboardOverview,
+} from "../../services/dashboardService";
+import SalesChart from "../../components/admin/SalesChart";
+
+import {
+  getMonthlySales,
+} from "../../services/dashboardService";
+
+import Loader from "../../components/common/Loader";
 function Dashboard() {
+const [overview, setOverview] = useState(null);
 
+const [loading, setLoading] =
+useState(true);
+const [monthlySales, setMonthlySales] =
+useState([]);
+
+useEffect(() => {
+
+  const fetchDashboard = async () => {
+
+    try {
+
+      const data =
+        await getDashboardOverview();
+
+      setOverview(data);
+      const sales =
+await getMonthlySales();
+
+setMonthlySales(sales);
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  fetchDashboard();
+
+}, []);
+if (loading) {
+
+  return <Loader />;
+
+}
   return (
 
     <div className="space-y-8">
@@ -46,7 +98,7 @@ function Dashboard() {
 
         <DashboardCard
           title="Revenue"
-          value="₹0"
+         value={`₹${overview?.totalRevenue || 0}`}
           icon={DollarSign}
           color="bg-green-100"
           iconColor="text-green-600"
@@ -54,7 +106,7 @@ function Dashboard() {
 
         <DashboardCard
           title="Orders"
-          value="0"
+          value={overview?.totalOrders || 0}
           icon={ShoppingCart}
           color="bg-blue-100"
           iconColor="text-blue-600"
@@ -62,7 +114,7 @@ function Dashboard() {
 
         <DashboardCard
           title="Users"
-          value="0"
+          value={overview?.totalUsers || 0}
           icon={Users}
           color="bg-purple-100"
           iconColor="text-purple-600"
@@ -70,7 +122,7 @@ function Dashboard() {
 
         <DashboardCard
           title="Products"
-          value="0"
+          value={overview?.totalProducts || 0}
           icon={Package}
           color="bg-orange-100"
           iconColor="text-orange-600"
@@ -116,7 +168,9 @@ function Dashboard() {
             "
           >
 
-            Chart Coming Soon
+           <SalesChart
+    data={monthlySales}
+/>
 
           </div>
 
