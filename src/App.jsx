@@ -1,9 +1,9 @@
-import Signup from "./Pages/Auth/Signup";
+import OTP from "./Pages/Auth/OTP";
 
 function App() {
   return (
     <>
-      <Signup />
+      <OTP />
     </>
   );
 }

@@ -1,136 +1,443 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; 
-import { AuthContext } from "./AuthContext";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+// import api from "../../services/api";
+import brand from "../../assets/logo/browear-1.png"
+
+import {
+  ShieldCheck,
+  RotateCcw,
+  ArrowRight,
+} from "lucide-react";
+
 function OTP() {
-  const [seconds, setSeconds] = useState(60);
-  const [otp, setOtp] = useState("");
-  const [error, setError] = useState("");
+
   const navigate = useNavigate();
-  const location = useLocation(); 
-  const { login } = useContext(AuthContext);
-  const { email, password, demoOtp } = location.state || {};
-  const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
-  const verifyOTP = async (e) => {
-    e.preventDefault();
+  const { email, password, demoOtp } =
+    location.state || {};
 
-    if (!otp) {
-      alert("Enter OTP");
-      return;
-    }
+  const [otp, setOtp] = useState("");
 
-    //  MOVED length check BEFORE fetch
-    if (otp.length !== 6) {
-      setError("Please enter a valid 6-digit OTP");
-      return;
-    }
+  const [seconds, setSeconds] =
+    useState(60);
 
-    //  Only send email + otp (password not needed for OTP verify)
-    const res = await fetch("http://localhost:3000/api/auth/verify-otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email,password,otp}) 
-    });
-   
-    const data = await res.json(); 
-   if (res.ok) {
-  console.log("TOKEN AFTER SIGNUP:", data.token);
+  const [loading, setLoading] =
+    useState(false);
 
-  localStorage.setItem("token", data.token);
+  const [resending, setResending] =
+    useState(false);
 
-  localStorage.removeItem("otpAccess");
-  localStorage.setItem("personalAccess", "true");
-
-  navigate("/personal");
-}else {
-      setError(data.message || "Invalid OTP");
-    }
-  };
-  const resendOTP = async () => {
-
-  await fetch("http://localhost:3000/api/auth/resend-otp", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ email })
-});
-
-
-  setSeconds(30); 
-};
-
+  const [error, setError] =
+    useState("");
 
   useEffect(() => {
+
     if (seconds === 0) return;
 
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
+
       setSeconds((prev) => prev - 1);
+
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(timer);
+
   }, [seconds]);
 
+  const verifyOTP = async (e) => {
+
+    e.preventDefault();
+
+    setError("");
+
+    if (!otp) {
+
+      setError("Please enter OTP.");
+
+      return;
+
+    }
+
+    if (otp.length !== 6) {
+
+      setError(
+        "OTP must contain exactly 6 digits."
+      );
+
+      return;
+
+    }
+
+    try {
+
+      setLoading(true);
+
+      const response =
+        await api.post(
+          "/auth/verify-otp",
+          {
+            email,
+            password,
+            otp,
+          }
+        );
+
+      const data = response.data;
+
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
+      localStorage.removeItem(
+        "otpAccess"
+      );
+
+      localStorage.setItem(
+        "personalAccess",
+        "true"
+      );
+
+      navigate("/personal");
+
+    } catch (err) {
+
+      console.log(err);
+
+      setError(
+
+        err.response?.data?.message ||
+
+        "OTP verification failed."
+
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+  const resendOTP = async () => {
+
+    try {
+
+      setResending(true);
+
+      await api.post(
+        "/auth/resend-otp",
+        {
+          email,
+        }
+      );
+
+      setSeconds(60);
+
+    } catch (err) {
+
+      console.log(err);
+
+      setError(
+
+        err.response?.data?.message ||
+
+        "Failed to resend OTP."
+
+      );
+
+    } finally {
+
+      setResending(false);
+
+    }
+
+  };
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white px-6 py-8 rounded-xl shadow-md">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-center">
-          Enter the 6-digit OTP
+  <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center px-6">
+
+    <div
+      className="
+      w-full
+      max-w-md
+      bg-white/90
+      backdrop-blur-xl
+      rounded-3xl
+      shadow-2xl
+      border
+      border-gray-200
+      p-8
+      "
+    >
+
+      {/* Logo */}
+
+      <div className="flex flex-col items-center">
+
+        <img
+          src={brand}
+          alt="Browear"
+          className="w-20 mb-4"
+        />
+
+        <h1 className="text-3xl font-bold tracking-tight">
+
+          Verify OTP
+
         </h1>
-        {demoOtp && (
-  <div className="mt-4 text-center">
-    <p className="text-sm text-gray-500">Demo OTP</p>
 
-    <p className="text-xl font-bold tracking-widest">
-      {demoOtp}
-    </p>
-  </div>
-)}
+        <p className="text-gray-500 mt-2 text-center">
 
-        <form onSubmit={verifyOTP} className="flex flex-col gap-5 mt-6">
-          <input
-           id="otp"
-            type="text"
-            placeholder="Enter OTP"
-            maxLength={6}
-            value={otp}
-            onChange={(e) =>
-              setOtp(e.target.value.replace(/[^0-9]/g, ""))
-            }
-            className="w-full h-11 text-center text-lg tracking-widest border-2 border-blue-950 rounded outline-none focus:ring-2 focus:ring-blue-400"
-            required
+          Enter the 6-digit verification code sent to
+
+        </p>
+
+        <p className="font-semibold mt-1">
+
+          {email}
+
+        </p>
+
+      </div>
+
+      {/* Demo OTP */}
+
+      {demoOtp && (
+
+        <div
+          className="
+          mt-6
+          rounded-2xl
+          bg-gray-100
+          border
+          border-gray-200
+          p-5
+          text-center
+          "
+        >
+
+          <p className="text-sm text-gray-500">
+
+            Demo OTP
+
+          </p>
+
+          <p
+            className="
+            text-3xl
+            tracking-[10px]
+            font-bold
+            mt-2
+            "
+          >
+
+            {demoOtp}
+
+          </p>
+
+        </div>
+
+      )}
+
+      {/* Error */}
+
+      {error && (
+
+        <div
+          className="
+          mt-5
+          rounded-xl
+          border
+          border-red-200
+          bg-red-50
+          p-3
+          text-sm
+          text-red-600
+          "
+        >
+
+          {error}
+
+        </div>
+
+      )}
+
+      {/* Form */}
+
+      <form
+        onSubmit={verifyOTP}
+        className="mt-8 space-y-6"
+      >
+
+        <div className="relative">
+
+          <ShieldCheck
+            size={20}
+            className="
+            absolute
+            left-4
+            top-1/2
+            -translate-y-1/2
+            text-gray-400
+            "
           />
-         
 
-          {error && (
-            <p className="text-red-600 text-sm text-center">
-              {error}
+          <input
+
+            type="text"
+
+            maxLength={6}
+
+            value={otp}
+
+            onChange={(e) =>
+              setOtp(
+                e.target.value.replace(
+                  /[^0-9]/g,
+                  ""
+                )
+              )
+            }
+
+            placeholder="Enter OTP"
+
+            className="
+            w-full
+            h-14
+            rounded-2xl
+            border
+            border-gray-200
+            pl-12
+            pr-4
+            text-center
+            text-xl
+            tracking-[8px]
+            outline-none
+            focus:border-black
+            transition
+            "
+
+          />
+
+        </div>
+
+        {/* Timer */}
+
+        <div className="text-center">
+
+          {seconds > 0 ? (
+
+            <p className="text-gray-500">
+
+              Resend OTP in
+
+              <span className="font-semibold">
+
+                {" "}
+                {seconds}s
+
+              </span>
+
             </p>
+
+          ) : (
+
+            <button
+
+              type="button"
+
+              onClick={resendOTP}
+
+              disabled={resending}
+
+              className="
+              inline-flex
+              items-center
+              gap-2
+              text-black
+              font-medium
+              hover:underline
+              disabled:opacity-50
+              "
+
+            >
+
+              <RotateCcw size={18} />
+
+              {resending
+                ? "Sending..."
+                : "Resend OTP"}
+
+            </button>
+
           )}
 
- <div style={{ marginTop: "10px" }}>
-      {seconds > 0 ? (
-        <p>Resend OTP in {seconds}s</p>
-      ) : (
-        <button onClick={resendOTP} disabled={loading}>
-          {loading ? "Sending..." : "Resend OTP"}
+        </div>
+
+        {/* Verify */}
+
+        <button
+
+          type="submit"
+
+          disabled={loading}
+
+          className="
+          w-full
+          h-14
+          rounded-2xl
+          bg-black
+          text-white
+          font-semibold
+          flex
+          items-center
+          justify-center
+          gap-2
+          hover:bg-zinc-900
+          transition
+          disabled:opacity-60
+          "
+
+        >
+
+          {loading ? (
+
+            <div
+              className="
+              w-5
+              h-5
+              rounded-full
+              border-2
+              border-white
+              border-t-transparent
+              animate-spin
+              "
+            />
+
+          ) : (
+
+            <>
+
+              Verify OTP
+
+              <ArrowRight size={18} />
+
+            </>
+
+          )}
+
         </button>
-      )}
+
+      </form>
+
     </div>
 
-          <button
-            type="submit"
-            disabled={seconds > 60}  
-            className="w-full h-11 bg-black text-white rounded font-semibold hover:opacity-90 disabled:opacity-50"
-          >
-            Verify
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+  </div>
+);
+
 }
 
 export default OTP;
