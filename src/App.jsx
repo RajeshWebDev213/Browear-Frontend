@@ -52,6 +52,11 @@ import ResetPassword from "./Pages/Auth/ResetPassword";
 
 import NotFound from "./Pages/NotFound";
 
+import AdminLayout from "./layouts/AdminLayout";
+
+import AdminRoute from "./routes/AdminRoute";
+
+import Dashboard from "./Pages/Admin/Dashboard";
 function App() {
   return (
     <Routes>
@@ -182,6 +187,26 @@ function App() {
     }
   />
   */}
+
+</Route>
+{/* ==========================================
+    Admin Layout
+========================================== */}
+
+<Route
+  element={
+    <AdminRoute>
+
+      <AdminLayout />
+
+    </AdminRoute>
+  }
+>
+
+  <Route
+    path="/admin"
+    element={<Dashboard />}
+  />
 
 </Route>
       {/* ==========================================
