@@ -17,10 +17,17 @@ import SalesChart from "../../components/admin/SalesChart";
 import {
   getMonthlySales,
 } from "../../services/dashboardService";
+import RevenueCard from "../../components/admin/RevenueCard";
+
+import {
+  getRevenueAnalytics,
+} from "../../services/dashboardService";
 
 import Loader from "../../components/common/Loader";
 function Dashboard() {
 const [overview, setOverview] = useState(null);
+const [revenue, setRevenue] =
+useState(null);
 
 const [loading, setLoading] =
 useState(true);
@@ -41,6 +48,10 @@ useEffect(() => {
 await getMonthlySales();
 
 setMonthlySales(sales);
+const revenueData =
+await getRevenueAnalytics();
+
+setRevenue(revenueData);
 
     } catch (error) {
 
@@ -193,20 +204,21 @@ if (loading) {
             Revenue Growth
 
           </h2>
+<RevenueCard
 
-          <div
-            className="
-            h-full
-            flex
-            items-center
-            justify-center
-            text-gray-400
-            "
-          >
+  totalRevenue={
+    revenue?.totalRevenue || 0
+  }
 
-            Chart Coming Soon
+  averageOrderValue={
+    revenue?.averageOrderValue || 0
+  }
 
-          </div>
+  growth={
+    revenue?.growth || 0
+  }
+
+/>
 
         </div>
 
