@@ -1,60 +1,91 @@
 import api from "./api";
 
 /*
-========================================
-PRODUCT SERVICES
-========================================
+=========================================
+GET ALL PRODUCTS
+=========================================
 */
 
-// Get All Products
 export const getAllProducts = async () => {
   const res = await api.get("/products");
   return res.data;
 };
 
-// Get Single Product
+/*
+=========================================
+GET SINGLE PRODUCT
+=========================================
+*/
+
 export const getProductById = async (id) => {
   const res = await api.get(`/products/${id}`);
   return res.data;
 };
 
-// Get Products By Category
+/*
+=========================================
+GET PRODUCTS BY CATEGORY
+=========================================
+*/
+
 export const getProductsByCategory = async (category) => {
   const res = await api.get(`/products/category/${category}`);
   return res.data;
 };
 
-// Search Products
-export const searchProducts = async (keyword) => {
-  const res = await api.get(`/products/search`, {
-    params: {
-      keyword,
-    },
-  });
+/*
+=========================================
+ADD PRODUCT (ADMIN)
+=========================================
+*/
+
+export const addProduct = async (formData) => {
+  const res = await api.post(
+    "/products",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
 
   return res.data;
 };
 
-// Get Featured Products
-export const getFeaturedProducts = async () => {
-  const res = await api.get("/products/featured");
+/*
+=========================================
+UPDATE PRODUCT (ADMIN)
+=========================================
+*/
+
+export const updateProduct = async (
+  id,
+  formData
+) => {
+  const res = await api.put(
+    `/products/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
   return res.data;
 };
 
-// Get Best Sellers
-export const getBestSellerProducts = async () => {
-  const res = await api.get("/products/bestseller");
-  return res.data;
-};
+/*
+=========================================
+DELETE PRODUCT (ADMIN)
+=========================================
+*/
 
-// Get Trending Products
-export const getTrendingProducts = async () => {
-  const res = await api.get("/products/trending");
-  return res.data;
-};
+export const deleteProduct = async (id) => {
+  const res = await api.delete(
+    `/products/${id}`
+  );
 
-// Get Products On Sale
-export const getOfferProducts = async () => {
-  const res = await api.get("/products/offers");
   return res.data;
 };

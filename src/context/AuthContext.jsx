@@ -1,65 +1,94 @@
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+} from "react";
+
+import { getAccount } from "../services/authService";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({
+  children,
+}) => {
 
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  // -----------------------
+  // Restore Login
+  // -----------------------
 
   useEffect(() => {
 
-    const token = localStorage.getItem("token");
+    const restoreUser = async () => {
 
-    // Also reject accidentally stored "undefined"
-    if (!token || token === "undefined") {
-      localStorage.removeItem("token");
-      setLoading(false);
-      return;
-    }
+      const token =
+        localStorage.getItem("token");
 
-    fetch("http://localhost:3000/api/auth/account", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-
-        if (!res.ok) {
-          throw new Error("Invalid token");
-        }
-
-        return res.json();
-      })
-
-      .then((data) => {
-
-        // Restore logged-in user after refresh
-        setUser(data);
-
-      })
-
-      .catch((error) => {
-
-        console.error("Authentication error:", error);
+      if (!token || token === "undefined") {
 
         localStorage.removeItem("token");
+
         localStorage.removeItem("user");
-
-        setUser(null);
-
-      })
-
-      .finally(() => {
 
         setLoading(false);
 
-      });
+        return;
+
+      }
+
+      try {
+
+        const data =
+          await getAccount();
+
+        setUser(data);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data)
+        );
+
+      }
+
+      catch (err) {
+
+        console.error(
+          "Authentication Error",
+          err
+        );
+
+        localStorage.removeItem(
+          "token"
+        );
+
+        localStorage.removeItem(
+          "user"
+        );
+
+        setUser(null);
+
+      }
+
+      finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+    restoreUser();
 
   }, []);
 
+  // -----------------------
+  // Login
+  // -----------------------
 
-  // Only update frontend authentication state
   const login = (userData) => {
 
     setUser(userData);
@@ -71,25 +100,35 @@ export const AuthProvider = ({ children }) => {
 
   };
 
+  // -----------------------
+  // Logout
+  // -----------------------
 
   const logout = () => {
 
     setUser(null);
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem(
+      "token"
+    );
+
+    localStorage.removeItem(
+      "user"
+    );
 
   };
 
+  // -----------------------
 
   return (
 
     <AuthContext.Provider
       value={{
         user,
+        loading,
         login,
         logout,
-        loading
+        isAuthenticated: !!user,
       }}
     >
 
@@ -98,4 +137,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
 
   );
+
 };
