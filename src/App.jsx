@@ -1,9 +1,9 @@
-import OTP from "./Pages/Auth/OTP";
+import ForgotPassword from "./Pages/Auth/ForgotPassword";
 
 function App() {
   return (
     <>
-      <OTP />
+      <ForgotPassword />
     </>
   );
 }
