@@ -22,18 +22,32 @@ import RevenueCard from "../../components/admin/RevenueCard";
 import {
   getRevenueAnalytics,
 } from "../../services/dashboardService";
+import OrderStatusCard
+from "../../components/admin/OrderStatusCard";
+
+import {
+  getOrderStatusAnalytics,
+} from "../../services/dashboardService";
+import OrdersTable
+from "../../components/admin/OrdersTable";
+
+import {
+  getRecentOrders,
+} from "../../services/dashboardService";
 
 import Loader from "../../components/common/Loader";
 function Dashboard() {
 const [overview, setOverview] = useState(null);
 const [revenue, setRevenue] =
 useState(null);
-
+const [recentOrders, setRecentOrders] =
+useState([]);
 const [loading, setLoading] =
 useState(true);
 const [monthlySales, setMonthlySales] =
 useState([]);
-
+const [orderStatus, setOrderStatus] =
+useState({});
 useEffect(() => {
 
   const fetchDashboard = async () => {
@@ -52,6 +66,14 @@ const revenueData =
 await getRevenueAnalytics();
 
 setRevenue(revenueData);
+const status =
+await getOrderStatusAnalytics();
+
+setOrderStatus(status);
+const orders =
+await getRecentOrders();
+
+setRecentOrders(orders);
 
     } catch (error) {
 
@@ -96,6 +118,24 @@ if (loading) {
       </div>
 
       {/* Cards */}
+      <div
+  className="
+  grid
+  lg:grid-cols-2
+  gap-6
+  mt-6
+  "
+>
+
+  <SalesChart
+    data={monthlySales}
+  />
+
+  <OrderStatusCard
+    status={orderStatus}
+  />
+
+</div>
 
       <div
         className="
@@ -169,21 +209,14 @@ if (loading) {
 
           </h2>
 
-          <div
-            className="
-            h-full
-            flex
-            items-center
-            justify-center
-            text-gray-400
-            "
-          >
+          
+      
 
            <SalesChart
     data={monthlySales}
 />
 
-          </div>
+        
 
         </div>
 
@@ -251,19 +284,9 @@ if (loading) {
 
           </h2>
 
-          <div
-            className="
-            h-48
-            flex
-            items-center
-            justify-center
-            text-gray-400
-            "
-          >
-
-            No Orders
-
-          </div>
+       <OrdersTable
+    orders={recentOrders}
+/>
 
         </div>
 
