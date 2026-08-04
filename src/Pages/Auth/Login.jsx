@@ -1,146 +1,425 @@
-import React, { useContext, useState } from "react";  
-import { Link,useLocation,useNavigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext";              
+import React, { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import api from "../../services/api";
+import brand from "../../assets/logo/browear-1.png"
+
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  ArrowRight,
+} from "lucide-react";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
+
   const { login } = useContext(AuthContext);
-const HandleLogin = async (e) => {
-  e.preventDefault();
 
-  if (!email || !password) {
-    setError("Email and password are required");
-    return;
-  }
+  const [email, setEmail] = useState("");
 
-  try {
-    const res = await fetch(
-      "http://localhost:3000/api/auth/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+  const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const HandleLogin = async (e) => {
+
+    e.preventDefault();
+
+    setError("");
+
+    if (!email || !password) {
+
+      setError(
+        "Please enter your email and password."
+      );
+
+      return;
+
+    }
+
+    try {
+
+      setLoading(true);
+
+      const response = await api.post(
+        "/auth/login",
+        {
           email,
           password,
-        }),
+        }
+      );
+
+      const data = response.data;
+
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
+      login(data.user);
+
+      if (location.state?.from === "buy") {
+
+        navigate("/checkout");
+
+      } else if (
+        data.user.role === "admin"
+      ) {
+
+        navigate("/adminpanel");
+
+      } else {
+
+        navigate("/");
+
       }
-    );
 
-    const data = await res.json();
+    } catch (err) {
 
-    // Debug
-    console.log("LOGIN RESPONSE:", data);
-    console.log("TOKEN FROM BACKEND:", data.token);
+      console.log(err);
 
-    // Check error BEFORE storing anything
-    if (!res.ok) {
-      alert(data.message || "Login failed");
-      return;
+      setError(
+
+        err.response?.data?.message ||
+
+        "Login failed. Please try again."
+
+      );
+
+    } finally {
+
+      setLoading(false);
+
     }
 
-    // Make sure token actually exists
-    if (!data.token) {
-      console.error("Backend did not return a token");
-      alert("Authentication error: token not received");
-      return;
-    }
-
-    // Save authentication data
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-
-    console.log(
-      "TOKEN SAVED:",
-      localStorage.getItem("token")
-    );
-
-    // Temporarily remove this until we check AuthContext
-    // login(data.user);
-     login(data.user);
-    alert("Login successful");
-
-    if (location.state?.from === "buy") {
-      navigate("/Checkout");
-    } else if (data.user.role === "admin") {
-      navigate("/adminpanel");
-    } else {
-      navigate("/");
-    }
-
-  } catch (err) {
-    console.error("LOGIN ERROR:", err);
-    setError("Login failed. Please try again.");
-  }
-};
-
+  };
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100 px-4">
-      <div className="w-full max-w-md bg-white px-6 py-8 rounded-xl shadow-md">
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-          <h1 className="text-2xl sm:text-3xl text-black text-center">
-            Login to <span className="font-extrabold">BROWEAR</span>
-          </h1>
-          <img
-            src="/browear-1.png" 
-            className="w-12 sm:w-16"
-            alt="logo"
-          />
-        </div>
+  <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center px-6">
 
-        <p className="text-center text-gray-600 mt-2">
-          Login to your Browear account
+    <div
+      className="
+      w-full
+      max-w-md
+      bg-white/90
+      backdrop-blur-xl
+      rounded-3xl
+      shadow-2xl
+      border
+      border-gray-200
+      p-8
+      "
+    >
+
+      {/* Logo */}
+
+      <div className="flex flex-col items-center">
+
+        <img
+          src="/browear-1.png"
+          alt="Browear"
+          className="w-20 mb-4"
+        />
+
+        <h1 className="text-3xl font-bold tracking-tight">
+
+          Welcome Back
+
+        </h1>
+
+        <p className="text-gray-500 mt-2 text-center">
+
+          Sign in to your Browear account
+
         </p>
 
-        {error && (
-          <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {error}
-          </div>
-        )}
+      </div>
 
-        <form className="flex flex-col gap-5 mt-6" onSubmit={HandleLogin}>
-          <input
-          id="emailbox"
-            type="email"
-            placeholder="Enter your email"
-            className="w-full h-10 bg-white outline-none border-2 border-blue-950 rounded px-2 focus:ring-2 focus:ring-blue-400"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+      {/* Error */}
+
+      {error && (
+
+        <div
+          className="
+          mt-6
+          rounded-xl
+          bg-red-50
+          border
+          border-red-200
+          p-3
+          text-red-600
+          text-sm
+          "
+        >
+
+          {error}
+
+        </div>
+
+      )}
+
+      {/* Form */}
+
+      <form
+
+        onSubmit={HandleLogin}
+
+        className="mt-8 space-y-5"
+
+      >
+
+        {/* Email */}
+
+        <div className="relative">
+
+          <Mail
+            size={20}
+            className="
+            absolute
+            left-4
+            top-1/2
+            -translate-y-1/2
+            text-gray-400
+            "
           />
 
           <input
-          id="password"
-            type="password"
-            placeholder="Enter your password"
-            className="w-full h-10 bg-white outline-none border-2 border-blue-950 rounded px-2 focus:ring-2 focus:ring-blue-400"
-            required
+
+            type="email"
+
+            value={email}
+
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+
+            placeholder="Email Address"
+
+            className="
+            w-full
+            h-14
+            rounded-2xl
+            border
+            border-gray-200
+            pl-12
+            pr-4
+            outline-none
+            focus:border-black
+            transition
+            "
+
+          />
+
+        </div>
+
+        {/* Password */}
+
+        <div className="relative">
+
+          <Lock
+            size={20}
+            className="
+            absolute
+            left-4
+            top-1/2
+            -translate-y-1/2
+            text-gray-400
+            "
+          />
+
+          <input
+
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
+
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+
+            onChange={(e) =>
+              setPassword(
+                e.target.value
+              )
+            }
+
+            placeholder="Password"
+
+            className="
+            w-full
+            h-14
+            rounded-2xl
+            border
+            border-gray-200
+            pl-12
+            pr-12
+            outline-none
+            focus:border-black
+            transition
+            "
+
           />
 
           <button
-            type="submit"
-            className="w-full h-10 bg-black text-white rounded font-semibold hover:opacity-90"
-          >
-            Login
-          </button>
-        </form>
 
-        <p className="text-center mt-4 text-sm">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-blue-600 font-semibold">
-            Signup
+            type="button"
+
+            onClick={() =>
+              setShowPassword(
+                !showPassword
+              )
+            }
+
+            className="
+            absolute
+            right-4
+            top-1/2
+            -translate-y-1/2
+            text-gray-400
+            hover:text-black
+            "
+
+          >
+
+            {showPassword ? (
+
+              <EyeOff size={20} />
+
+            ) : (
+
+              <Eye size={20} />
+
+            )}
+
+          </button>
+
+        </div>
+
+        {/* Forgot */}
+
+        <div className="flex justify-end">
+
+          <Link
+
+            to="/forgot-password"
+
+            className="
+            text-sm
+            text-gray-500
+            hover:text-black
+            transition
+            "
+
+          >
+
+            Forgot Password?
+
           </Link>
-        </p>
+
+        </div>
+
+        {/* Login */}
+
+        <button
+
+          type="submit"
+
+          disabled={loading}
+
+          className="
+          w-full
+          h-14
+          rounded-2xl
+          bg-black
+          text-white
+          font-semibold
+          flex
+          items-center
+          justify-center
+          gap-2
+          hover:bg-zinc-900
+          transition
+          disabled:opacity-60
+          "
+
+        >
+
+          {loading ? (
+
+            <div
+              className="
+              w-5
+              h-5
+              rounded-full
+              border-2
+              border-white
+              border-t-transparent
+              animate-spin
+              "
+            />
+
+          ) : (
+
+            <>
+
+              Login
+
+              <ArrowRight size={18} />
+
+            </>
+
+          )}
+
+        </button>
+
+      </form>
+
+      {/* Signup */}
+
+      <div className="mt-8 text-center">
+
+        <span className="text-gray-500">
+
+          Don't have an account?
+
+        </span>
+
+        <Link
+
+          to="/signup"
+
+          className="
+          ml-2
+          font-semibold
+          hover:underline
+          "
+
+        >
+
+          Create Account
+
+        </Link>
+
       </div>
+
     </div>
-  );
+
+  </div>
+);
+
 }
 
 export default Login;
