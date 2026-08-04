@@ -1,34 +1,51 @@
-import React, { useState,useContext } from "react";
-import { useCart } from "./CartContext";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useOrders } from "../Orders/OrdersContext";
-const Checkout = () => {
+import { MapPin, Truck, CheckCircle2 } from "lucide-react";
+
+import { useCart } from "../../context/CartContext";
+import { useOrders } from "../../context/OrderContext";
+
+import emptyCart from "../../assets/images/cart.png";
+
+function Checkout() {
+  const navigate = useNavigate();
+
   const { cartItems, clearCart } = useCart();
+
   const { addOrder } = useOrders();
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+
+  const paymentMethod = "COD";
+
   const [orderSuccess, setOrderSuccess] = useState(false);
+
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
-  const navigate = useNavigate()
-    
+
+  const [address, setAddress] = useState({
+    name: "",
+    mobile: "",
+    city: "",
+    pincode: "",
+    addressLine: "",
+  });
+
   const subtotal = cartItems.reduce(
-    (sum, item) => sum + Number(item.price) * item.quantity,
+    (sum, item) =>
+      sum + Number(item.price || 0) * (item.quantity || 1),
     0
   );
-
 
   const discount = cartItems.reduce(
     (sum, item) =>
       sum +
-      ((Number(item.discount) || 0) *
-        Number(item.price) *
-        item.quantity) /
-        100,
+      ((Number(item.discount || 0) *
+        Number(item.price || 0) *
+        (item.quantity || 1)) /
+        100),
     0
   );
 
   const finalAmount = subtotal - discount;
 
-  // Place Order
   const handlePlaceOrder = async () => {
     if (
       !address.name ||
@@ -37,272 +54,410 @@ const Checkout = () => {
       !address.pincode ||
       !address.addressLine
     ) {
-      alert("Please fill all address details");
+      alert("Please fill all address details.");
       return;
     }
-     
-     const token = localStorage.getItem("token");
-     console.log("TOKEN AT CHECKOUT:", token);
+
+    try {
+      const token = localStorage.getItem("token");
+
       if (!token) {
-        alert("Session expired. Please signup again.");
-        navigate("/Login");
+        alert("Please login again.");
+        navigate("/login");
         return;
       }
-const res = await fetch("http://localhost:3000/api/auth/orders", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  },
-  body: JSON.stringify({
-    ordered_name: address.name,
-    phone: address.mobile,
-    city: address.city,
-    pincode: address.pincode,
-    address: address.addressLine,
-    total_amount: finalAmount,
-    payment_type: paymentMethod,
-  }),
-});
 
-const data = await res.json();
-console.log("ORDER RESPONSE:", data);
+      const res = await fetch(
+        "http://localhost:3000/api/auth/orders",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ordered_name: address.name,
+            phone: address.mobile,
+            city: address.city,
+            pincode: address.pincode,
+            address: address.addressLine,
+            total_amount: finalAmount,
+            payment_type: paymentMethod,
+          }),
+        }
+      );
 
+      const data = await res.json();
 
- if (!res.ok) {
-    console.error("Order failed");
-    return;
-  } 
+      if (!res.ok) {
+        alert(data.message);
+        return;
+      }
 
-    const newOrder = {
-    id: Date.now(),
-    items: cartItems,
-    amount: finalAmount,
-    address,
-    paymentMethod,
-    date: new Date().toLocaleString(),
-    };
+      const newOrder = {
+        id: Date.now(),
+        items: cartItems,
+        amount: finalAmount,
+        address,
+        paymentMethod,
+        date: new Date().toLocaleString(),
+      };
 
-    setOrderSuccess(true);
-    setIsPlacingOrder(true);
-    
-    
-    setTimeout(() => {
-      addOrder(newOrder);   
-      clearCart();  
-           navigate("/Account", {
-        state: { openTab: "orders" }
-      });      
-      
+      setOrderSuccess(true);
+      setIsPlacingOrder(true);
 
-    }, 2500);
+      setTimeout(() => {
+        addOrder(newOrder);
+        clearCart();
 
-
+        navigate("/account", {
+          state: {
+            openTab: "orders",
+          },
+        });
+      }, 2500);
+    } catch (err) {
+      console.log(err);
+      alert("Order failed.");
+    }
   };
-  
-  const [address, setAddress] = useState({
-    name: "",
-    mobile: "",
-    city: "",
-    pincode: "",
-    addressLine: "",
-    
-  });
 
+  if (cartItems.length === 0 && !isPlacingOrder) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
 
- 
- 
-  // Empty cart
-if (cartItems.length === 0 && !isPlacingOrder) {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
         <img
-          src="/cart.png"
+          src={emptyCart}
           alt="Empty Cart"
-          className="w-52 mb-6 opacity-80"
+          className="w-56"
         />
 
-        <h2 className="text-2xl font-semibold mb-2">
+        <h2 className="text-3xl font-bold mt-8">
           Your cart is empty
         </h2>
-        <p className="text-gray-500 mb-6">
-          Add items to your cart to checkout
+
+        <p className="text-gray-500 mt-3">
+          Add products before checkout.
         </p>
 
         <Link to="/">
-          <button className="px-6 py-3 bg-black hover:bg-gray-600 text-white rounded-md font-medium">
+          <button className="mt-8 px-8 py-4 rounded-2xl bg-black text-white hover:bg-zinc-900 transition">
             Continue Shopping
           </button>
         </Link>
-      </div>
-    </div>
-  );
-}
 
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-8 relative">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* LEFT SECTION */}
-        <div className="md:col-span-2 space-y-6">
-          {/* ORDER SUMMARY */}
-          <div className="bg-white rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
+    <section className="min-h-screen bg-gray-50 py-12">
 
-            {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-4 border-b pb-4 mb-4"
-              >
-                <img
-                  src={item.img}
-                  alt={item.name}
-                  className="w-20 h-20 object-cover rounded"
-                />
+      <div className="max-w-7xl mx-auto px-5">
 
-                <div className="flex-1">
-                  <h3 className="font-medium">{item.name}</h3>
-                  <p className="text-sm text-gray-500">
-                    Qty: {item.quantity}
-                  </p>
-                </div>
+        <h1 className="text-4xl font-bold mb-10">
+          Checkout
+        </h1>
 
-                <p className="font-semibold">
-                  ₹{Number(item.price) * item.quantity}
-                </p>
-              </div>
-            ))}
-          </div>
+        <div className="grid lg:grid-cols-3 gap-8">
 
-          {/* ADDRESS */}
-          <div className="bg-white rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-4">Delivery Address</h2>
+          {/* LEFT SECTION */}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                className="border p-2 rounded"
-                placeholder="Full Name"
-                onChange={(e) =>
-                  setAddress({ ...address, name: e.target.value })
-                }
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Mobile Number"
-                onChange={(e) =>
-                  setAddress({ ...address, mobile: e.target.value })
-                }
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="City"
-                onChange={(e) =>
-                  setAddress({ ...address, city: e.target.value })
-                }
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Pincode"
-                onChange={(e) =>
-                  setAddress({ ...address, pincode: e.target.value })
-                }
-              />
+          <div className="lg:col-span-2 space-y-8">
 
-              <textarea
-                className="border p-2 rounded md:col-span-2 resize-none"
-                placeholder="Full Address"
-                onChange={(e) =>
-                  setAddress({ ...address, addressLine: e.target.value })
-                }
-              ></textarea>
-            </div>
+            {/* ORDER ITEMS */}
 
-            {/* PAYMENT */}
-            <div className="mt-6">
-              <h2 className="text-lg font-semibold mb-3">
-                Payment Method
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+
+              <h2 className="text-2xl font-semibold mb-6">
+                Order Summary
               </h2>
 
-              <label className="block mb-2">
-                <input
-                  type="radio"
-                  value="COD"
-                  checked={paymentMethod === "COD"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                />{" "}
-                Cash on Delivery
-              </label>
+              <div className="space-y-5">
+
+                {cartItems.map((item) => (
+
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-5 border-b border-gray-100 pb-5"
+                  >
+
+                    <img
+                      src={item.img || item.images?.[0]?.url}
+                      alt={item.name}
+                      className="w-24 h-24 rounded-2xl object-cover"
+                    />
+
+                    <div className="flex-1">
+
+                      <h3 className="font-semibold">
+                        {item.name}
+                      </h3>
+
+                      <p className="text-gray-500 mt-1">
+                        Qty : {item.quantity}
+                      </p>
+
+                    </div>
+
+                    <h3 className="font-semibold">
+                      ₹
+                      {(Number(item.price) * item.quantity).toFixed(0)}
+                    </h3>
+
+                  </div>
+
+                ))}
+
+              </div>
 
             </div>
+
+            {/* DELIVERY ADDRESS */}
+
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+
+              <div className="flex items-center gap-3 mb-6">
+
+                <MapPin />
+
+                <h2 className="text-2xl font-semibold">
+                  Delivery Address
+                </h2>
+
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-5">
+
+                <input
+                  placeholder="Full Name"
+                  className="h-14 rounded-2xl border border-gray-200 px-5 outline-none focus:border-black"
+                  onChange={(e) =>
+                    setAddress({
+                      ...address,
+                      name: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  placeholder="Mobile Number"
+                  className="h-14 rounded-2xl border border-gray-200 px-5 outline-none focus:border-black"
+                  onChange={(e) =>
+                    setAddress({
+                      ...address,
+                      mobile: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  placeholder="City"
+                  className="h-14 rounded-2xl border border-gray-200 px-5 outline-none focus:border-black"
+                  onChange={(e) =>
+                    setAddress({
+                      ...address,
+                      city: e.target.value,
+                    })
+                  }
+                />
+
+                <input
+                  placeholder="Pincode"
+                  className="h-14 rounded-2xl border border-gray-200 px-5 outline-none focus:border-black"
+                  onChange={(e) =>
+                    setAddress({
+                      ...address,
+                      pincode: e.target.value,
+                    })
+                  }
+                />
+
+                <textarea
+                  rows="4"
+                  placeholder="Full Address"
+                  className="md:col-span-2 rounded-2xl border border-gray-200 p-5 outline-none focus:border-black resize-none"
+                  onChange={(e) =>
+                    setAddress({
+                      ...address,
+                      addressLine: e.target.value,
+                    })
+                  }
+                />
+                              </div>
+
+            </div>
+
+            {/* PAYMENT METHOD */}
+
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+
+              <div className="flex items-center gap-3 mb-6">
+
+                <Truck />
+
+                <h2 className="text-2xl font-semibold">
+                  Payment Method
+                </h2>
+
+              </div>
+
+              <div className="border-2 border-black rounded-2xl p-5 flex items-center justify-between">
+
+                <div className="flex items-center gap-4">
+
+                  <input
+                    type="radio"
+                    checked
+                    readOnly
+                    className="accent-black w-5 h-5"
+                  />
+
+                  <div>
+
+                    <h3 className="font-semibold">
+                      Cash on Delivery
+                    </h3>
+
+                    <p className="text-gray-500 text-sm mt-1">
+                      Pay securely when your order arrives.
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <Truck size={22} />
+
+              </div>
+
+            </div>
+
           </div>
+
+          {/* RIGHT SECTION */}
+
+          <div className="lg:col-span-1">
+
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 sticky top-24">
+
+              <h2 className="text-2xl font-bold">
+                Price Details
+              </h2>
+
+              <div className="space-y-5 mt-8">
+
+                <div className="flex justify-between">
+
+                  <span className="text-gray-500">
+                    Subtotal
+                  </span>
+
+                  <span className="font-medium">
+                    ₹{subtotal.toFixed(0)}
+                  </span>
+
+                </div>
+
+                <div className="flex justify-between">
+
+                  <span className="text-green-600">
+                    Discount
+                  </span>
+
+                  <span className="font-medium text-green-600">
+                    -₹{discount.toFixed(0)}
+                  </span>
+
+                </div>
+
+                <div className="flex justify-between">
+
+                  <span className="text-gray-500">
+                    Delivery
+                  </span>
+
+                  <span className="font-medium">
+                    FREE
+                  </span>
+
+                </div>
+
+              </div>
+
+              <hr className="my-6" />
+
+              <div className="flex justify-between items-center">
+
+                <span className="text-2xl font-bold">
+                  Total
+                </span>
+
+                <span className="text-2xl font-bold">
+                  ₹{finalAmount.toFixed(0)}
+                </span>
+
+              </div>
+
+              <button
+                onClick={handlePlaceOrder}
+                className="w-full h-14 mt-8 rounded-2xl bg-black text-white font-semibold hover:bg-zinc-900 transition"
+              >
+                Place Order
+              </button>
+
+            </div>
+
+          </div>
+
         </div>
 
-        {/* RIGHT SECTION */}
-        <div className="bg-white rounded-lg p-4 h-fit md:sticky md:top-24">
-          <h2 className="text-lg font-semibold mb-4">Price Details</h2>
-
-          <div className="flex justify-between mb-2">
-            <span>Subtotal</span>
-            <span>₹{subtotal}</span>
-          </div>
-
-          <div className="flex justify-between mb-2 text-green-600">
-            <span>Discount</span>
-            <span>-₹{discount}</span>
-          </div>
-
-          <div className="flex justify-between mb-2">
-            <span>Delivery</span>
-            <span>FREE</span>
-          </div>
-
-          <hr className="my-3" />
-
-          <div className="flex justify-between font-bold text-lg">
-            <span>Total</span>
-            <span>₹{finalAmount}</span>
-          </div>
-
-          <button
-            onClick={handlePlaceOrder}
-            className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded font-semibold"
-          >
-            Place Order
-          </button>
-        </div>
       </div>
 
+      {/* SUCCESS MODAL */}
+
       {orderSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
-          <div className="flex flex-col items-center animate-zoomOut">
-            <div className="w-28 h-28 bg-green-500 rounded-full flex items-center justify-center mb-6">
-              <svg
-                className="w-16 h-16 text-white"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="4"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+
+        <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
+
+          <div className="text-center animate-pulse">
+
+            <div className="w-32 h-32 rounded-full bg-black flex items-center justify-center mx-auto">
+
+              <CheckCircle2
+                size={72}
+                className="text-white"
+              />
+
             </div>
 
-            <h2 className="text-2xl font-bold mb-2">
-              Order Placed!
+            <h2 className="text-4xl font-bold mt-8">
+
+              Order Placed Successfully
+
             </h2>
-            <p className="text-gray-600">
-              Thank you for shopping 🎉
+
+            <p className="text-gray-500 mt-3">
+
+              Thank you for shopping with Browear.
+
             </p>
+
+            <p className="text-sm text-gray-400 mt-2">
+
+              Redirecting to your orders...
+
+            </p>
+
           </div>
+
         </div>
+
       )}
-    </div>
+
+    </section>
+
   );
-};
+}
 
 export default Checkout;
