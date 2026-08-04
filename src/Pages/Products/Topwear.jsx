@@ -1,100 +1,184 @@
-import { Topwearitems } from "./Topwearitems";
-import { Link } from "react-router-dom";
-import { useWishlist } from "../Wishlist/WishlistContext";
+import { useEffect, useMemo, useState } from "react";
 
-export default function Topwear() {
-  const{wishlist, addToWishlist, removeFromWishlist} = useWishlist();
+import ProductGrid from "../../components/Product/ProductGrid";
+import ProductFilter from "../../components/Product/ProductFilter";
 
-  // check if product is already liked
-  const isLiked = (id) =>
-    wishlist.some((item) => item && item.id === id);
+import { getProductsByCategory } from "../../services/productService";
 
-  // handle heart click
-  const handleLike = (e, product) => {
-    e.preventDefault();
+function Topwear() {
 
-    if (isLiked(product.id)) {
-      removeFromWishlist(product.id);
-    } else {
-      addToWishlist(product);
+  const [products, setProducts] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const [search, setSearch] = useState("");
+
+  const [sort, setSort] = useState("");
+
+  const [minPrice, setMinPrice] = useState("");
+
+  const [maxPrice, setMaxPrice] = useState("");
+
+  useEffect(() => {
+    fetchTopwear();
+  }, []);
+
+  const fetchTopwear = async () => {
+
+    try {
+
+      setLoading(true);
+
+      const data = await getProductsByCategory("Topwear");
+
+      setProducts(data.products || data);
+
+    } catch (err) {
+
+      console.log(err);
+
+    } finally {
+
+      setLoading(false);
+
     }
+
+  };
+
+  const filteredProducts = useMemo(() => {
+
+    let filtered = [...products];
+
+    // Search
+
+    if (search) {
+
+      filtered = filtered.filter((product) =>
+        product.name
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      );
+
+    }
+
+    // Minimum Price
+
+    if (minPrice) {
+
+      filtered = filtered.filter(
+        (product) =>
+          Number(product.price) >= Number(minPrice)
+      );
+
+    }
+
+    // Maximum Price
+
+    if (maxPrice) {
+
+      filtered = filtered.filter(
+        (product) =>
+          Number(product.price) <= Number(maxPrice)
+      );
+
+    }
+
+    // Sorting
+
+    switch (sort) {
+
+      case "lowToHigh":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+
+      case "highToLow":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+
+      case "rating":
+        filtered.sort(
+          (a, b) =>
+            (b.rating || 0) - (a.rating || 0)
+        );
+        break;
+
+      case "discount":
+        filtered.sort(
+          (a, b) =>
+            (b.discount || 0) - (a.discount || 0)
+        );
+        break;
+
+      default:
+        break;
+
+    }
+
+    return filtered;
+
+  }, [
+    products,
+    search,
+    sort,
+    minPrice,
+    maxPrice,
+  ]);
+
+  const clearFilters = () => {
+
+    setSearch("");
+
+    setSort("");
+
+    setMinPrice("");
+
+    setMaxPrice("");
+
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
 
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6">
-        Topwear Collection
+    <section className="max-w-7xl mx-auto px-5 py-10">
+
+      <h1 className="text-4xl font-bold mb-10">
+
+        Topwear
+
       </h1>
 
-      {/* RESPONSIVE GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {Topwearitems.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition overflow-hidden"
-          >
-            {/* IMAGE */}
-            <div className="relative h-60 sm:h-72 bg-gray-100 overflow-hidden">
-              <Link to={`/product/${product.id}`}>
-                <img
-                  src={product.img}
-                  alt={product.name}
-                  className="w-full h-full object-cover hover:scale-110 transition"
-                />
-              </Link>
+      <ProductFilter
 
-              {/* ❤️ Wishlist Button */}
-              <button
-                onClick={(e) => handleLike(e, product)}
-                className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md z-10"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill={isLiked(product.id) ? "red" : "none"}
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className={`w-5 h-5 ${
-                    isLiked(product.id)
-                      ? "text-red-500"
-                      : "text-gray-400"
-                  }`}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                  />
-                </svg>
-              </button>
-            </div>
+        search={search}
+        setSearch={setSearch}
 
-            {/* CONTENT */}
-            <div className="p-5">
-              <p className="text-lg font-semibold truncate">
-                {product.name}
-              </p>
+        category="Topwear"
+        setCategory={() => {}}
 
-              <div className="flex justify-between mt-2">
-                <p className="text-xl font-bold">
-                  ₹{product.price}
-                </p>
-                <span className="text-sm text-green-600">
-                  ★ {product.rating || 4.5}
-                </span>
-              </div>
+        sort={sort}
+        setSort={setSort}
 
-              <Link
-                to={`/product/${product.id}`}
-                className="block mt-4 text-center border border-black py-2 rounded-lg hover:bg-black hover:text-white transition"
-              >
-                View Details
-              </Link>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+        minPrice={minPrice}
+        setMinPrice={setMinPrice}
+
+        maxPrice={maxPrice}
+        setMaxPrice={setMaxPrice}
+
+        clearFilters={clearFilters}
+
+      />
+
+      <ProductGrid
+
+        products={filteredProducts}
+
+        loading={loading}
+
+      />
+
+    </section>
+
   );
+
 }
+
+export default Topwear;

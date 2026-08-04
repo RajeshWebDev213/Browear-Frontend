@@ -20,11 +20,12 @@ import NotFound from "./Pages/NotFound";
 import ProductSkeleton from "./components/Product/ProductSkeleton";
 import ProductCard from "./components/Product/ProductCard";
 import ProductFilter from "./components/Product/ProductFilter";
+import ProductDetails from "./Pages/Products/ProductDetails";
 function App() {
   return (
-    <>
-    <ProductFilter/>
-    </>
+  <>
+  <ProductDetails/>
+  </>
     // <Routes>
 
     //   {/* Home */}
