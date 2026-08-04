@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import api from "../../services/api";
+// import api from "../../services/api";
 import brand from "../../assets/logo/browear-1.png"
 
 import {
@@ -129,7 +129,7 @@ function Login() {
       <div className="flex flex-col items-center">
 
         <img
-          src="/browear-1.png"
+          src={brand}
           alt="Browear"
           className="w-20 mb-4"
         />
