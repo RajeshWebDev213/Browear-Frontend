@@ -1,9 +1,9 @@
-import ForgotPassword from "./Pages/Auth/ForgotPassword";
+import ResetPassword from "./Pages/Auth/ResetPassword";
 
 function App() {
   return (
     <>
-      <ForgotPassword />
+    <ResetPassword />
     </>
   );
 }
