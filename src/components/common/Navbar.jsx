@@ -10,11 +10,11 @@ import {
   LogOut,
 } from "lucide-react";
 
-import { useCart } from "../../context/CartContext";
+
 import { AuthContext } from "../../context/AuthContext";
 import logo from "../../assets/logo/browear-1.png"
 import brand from "../../assets/logo/websitename.png"
-
+import { useCart } from "../../hooks/useCart";
 export default function Navbar() {
 
   const { cartItems } = useCart();

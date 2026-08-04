@@ -2,17 +2,17 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MapPin, Truck, CheckCircle2 } from "lucide-react";
 
-import { useCart } from "../../context/CartContext";
-import { useOrders } from "../../context/OrderContext";
+import { CartContext } from "../../context/cartContext";
+import { OrdersContext } from "../../context/orderContext";
 
 import emptyCart from "../../assets/images/cart.png";
 
 function Checkout() {
   const navigate = useNavigate();
 
-  const { cartItems, clearCart } = useCart();
+  const { cartItems, clearCart } = CartContext();
 
-  const { addOrder } = useOrders();
+  const { addOrder } = OrdersContext();
 
   const paymentMethod = "COD";
 

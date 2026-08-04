@@ -1,8 +1,11 @@
 import { Navigate } from "react-router-dom";
 
-const OtpRoute = ({ children }) => {
+const OTPRoute = ({ children }) => {
   const otpAccess = localStorage.getItem("otpAccess");
-  return otpAccess ? children : <Navigate to="/Signup" />;
+
+  return otpAccess
+    ? children
+    : <Navigate to="/signup" replace />;
 };
 
-export default OtpRoute;
+export default OTPRoute;

@@ -1,9 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-// import api from "../../services/api";
+import api from "../../services/api";
 import brand from "../../assets/logo/browear-1.png"
-
+import {
+  validateEmail,
+  validatePassword,
+} from "../../utils/validation";
 import {
   Eye,
   EyeOff,
@@ -45,6 +48,23 @@ function Login() {
       return;
 
     }
+    if (!validateEmail(email)) {
+
+  showError("Enter a valid email");
+
+  return;
+
+}
+
+if (!validatePassword(password)) {
+
+  showError(
+    "Password must be at least 6 characters"
+  );
+
+  return;
+
+}
 
     try {
 

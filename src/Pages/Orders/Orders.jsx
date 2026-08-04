@@ -1,9 +1,9 @@
 import React from "react";
-import { useOrders } from "./OrdersContext";
+import { OrdersContext } from "../../context/orderContext";
 import { Link } from "react-router-dom";
 
 const Orders = () => {
-  const { orders } = useOrders();
+  const { orders } = OrdersContext();
    
   // EMPTY STATE
   if (orders.length === 0) {

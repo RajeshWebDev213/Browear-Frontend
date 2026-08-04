@@ -20,13 +20,11 @@ UPDATE PROFILE
 =========================================
 */
 
-export const updateProfile = async (
-  profileData
-) => {
+export const updateProfile = async (data) => {
 
   const res = await api.put(
     "/profile/update",
-    profileData
+    data
   );
 
   return res.data;

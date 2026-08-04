@@ -4,8 +4,12 @@ import React, {
 } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { updateProfile } from "../../services/profileService";
 
-// import api from "../../services/api";
+import {
+  showSuccess,
+  showError,
+} from "../../utils/toast";
 
 import brand from "../../assets/logo/browear-1.png";
 
@@ -44,91 +48,89 @@ function Personal() {
   const [loading, setLoading] =
     useState(false);
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
 
-    e.preventDefault();
+  e.preventDefault();
 
-    let formErrors = {};
+  let formErrors = {};
 
-    if (!fullname.trim())
-      formErrors.fullname =
-        "Full name is required.";
+  if (!fullname.trim()) {
+    formErrors.fullname = "Full name is required.";
+  }
 
-    if (!gender)
-      formErrors.gender =
-        "Gender is required.";
+  if (!gender) {
+    formErrors.gender = "Gender is required.";
+  }
 
-    if (!dob)
-      formErrors.dob =
-        "Date of Birth is required.";
+  if (!dob) {
+    formErrors.dob = "Date of Birth is required.";
+  }
 
-    if (!phonenumber)
-      formErrors.phonenumber =
-        "Phone number is required.";
+  if (!phonenumber.trim()) {
+    formErrors.phonenumber = "Phone number is required.";
+  }
 
-    setErrors(formErrors);
+  if (
+    phonenumber &&
+    !/^[6-9]\d{9}$/.test(phonenumber)
+  ) {
+    formErrors.phonenumber =
+      "Enter a valid phone number.";
+  }
 
-    if (
-      Object.keys(formErrors).length > 0
-    )
-      return;
+  setErrors(formErrors);
 
-    try {
+  if (Object.keys(formErrors).length > 0) {
+    return;
+  }
 
-      setLoading(true);
+  try {
 
-      const response =
-        await api.post(
-          "/auth/personal",
-          {
-            fullname,
-            gender,
-            dob,
-            phonenumber,
-          }
-        );
+    setLoading(true);
 
-      const data = response.data;
+    const data = await updateProfile({
 
-      login({
+      fullname,
 
-        ...user,
+      gender,
 
-        fullname,
+      dob,
 
-        gender,
+      phonenumber,
 
-        dob,
+    });
 
-        phonenumber,
+    login(data.user);
 
-      });
+    localStorage.removeItem(
+      "personalAccess"
+    );
 
-      localStorage.removeItem(
-        "personalAccess"
-      );
+    showSuccess(
+      "Profile Completed Successfully"
+    );
 
-      navigate("/");
+    navigate("/");
 
-    } catch (err) {
+  } catch (err) {
 
-      console.log(err);
+    console.log(err);
 
-      alert(
+    showError(
 
-        err.response?.data?.message ||
+      err.response?.data?.message ||
 
-        "Something went wrong."
+      "Something went wrong."
 
-      );
+    );
 
-    } finally {
+  } finally {
 
-      setLoading(false);
+    setLoading(false);
 
-    }
+  }
 
-  };
+};
     return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center px-6 py-10">
 

@@ -1,68 +1,209 @@
-import { createContext, useState, useContext,useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+} from "react";
 
-const CartContext = createContext();
+import {
+  getCart,
+  addToCart as addCartService,
+  updateCartQuantity,
+  removeFromCart as removeCartService,
+  clearCart as clearCartService,
+  getCartSummary,
+  getCartCount,
+} from "../services/cartService";
 
-export const CartContextProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => {
-    return JSON.parse(localStorage.getItem("cartItems")) || [];
-  });
+export const CartContext = createContext();
+
+export const CartContextProvider = ({
+  children,
+}) => {
+
+  const [cartItems, setCartItems] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [cartCount, setCartCount] =
+    useState(0);
+
+  const [summary, setSummary] =
+    useState(null);
+
+  /*
+  =========================================
+  LOAD CART
+  =========================================
+  */
+
+  const refreshCart = async () => {
+
+    const token =
+      localStorage.getItem("token");
+
+    if (!token) {
+
+      setCartItems([]);
+
+      setCartCount(0);
+
+      setSummary(null);
+
+      setLoading(false);
+
+      return;
+
+    }
+
+    try {
+
+      setLoading(true);
+
+      const cart =
+        await getCart();
+
+      setCartItems(
+        cart.items || cart.cartItems || []
+      );
+
+      const count =
+        await getCartCount();
+
+      setCartCount(
+        count.count || 0
+      );
+
+      const cartSummary =
+        await getCartSummary();
+
+      setSummary(cartSummary);
+
+    }
+
+    catch (err) {
+
+      console.error(err);
+
+    }
+
+    finally {
+
+      setLoading(false);
+
+    }
+
+  };
 
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
-  
- 
-  const addToCart = (item) => {
-    setCartItems(prev => {
- 
-      const existingItem = prev.find(cartItem => cartItem.id === item.id);
-      
-      if (existingItem) {
-     
-        return prev.map(cartItem =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: (cartItem.quantity || 1) + 1 }
-            : cartItem
-        );
-      } else {
 
-        return [...prev, { ...item, quantity: 1 }];
-      }
-    });
-  };
-  
+    refreshCart();
 
-  const removeFromCart = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-  };
-  
-  const clearCart = () =>{
-    setCartItems([]);
-  }
-  
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity <= 0) {
-      removeFromCart(id);
-      return;
-    }
-    setCartItems(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
+  }, []);
+
+  /*
+  =========================================
+  ADD TO CART
+  =========================================
+  */
+
+  const addToCart = async (
+    productId,
+    quantity = 1
+  ) => {
+
+    await addCartService(
+      productId,
+      quantity
     );
+
+    refreshCart();
+
+  };
+
+  /*
+  =========================================
+  UPDATE QUANTITY
+  =========================================
+  */
+
+  const updateQuantity = async (
+    productId,
+    quantity
+  ) => {
+
+    await updateCartQuantity(
+      productId,
+      quantity
+    );
+
+    refreshCart();
+
+  };
+
+  /*
+  =========================================
+  REMOVE ITEM
+  =========================================
+  */
+
+  const removeFromCart = async (
+    productId
+  ) => {
+
+    await removeCartService(
+      productId
+    );
+
+    refreshCart();
+
+  };
+
+  /*
+  =========================================
+  CLEAR CART
+  =========================================
+  */
+
+  const clearCart = async () => {
+
+    await clearCartService();
+
+    refreshCart();
+
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart, updateQuantity }}>
-      {children}
-    </CartContext.Provider>
-  );
-};
 
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error("useCart must be used within CartContextProvider");
-  }
-  return context;
+    <CartContext.Provider
+      value={{
+
+        cartItems,
+
+        loading,
+
+        cartCount,
+
+        summary,
+
+        addToCart,
+
+        updateQuantity,
+
+        removeFromCart,
+
+        clearCart,
+
+        refreshCart,
+
+      }}
+    >
+
+      {children}
+
+    </CartContext.Provider>
+
+  );
+
 };
