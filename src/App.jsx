@@ -64,6 +64,7 @@ import Orders from "./Pages/Admin/Orders";
 import OrderDetails from "./Pages/Admin/OrderDetails";
 import Users from "./Pages/Admin/Users";
 import UserDetails from "./Pages/Admin/OrderDetails";
+import Reviews from "./Pages/Admin/Reviews";
 function App() {
   return (
     <Routes>
@@ -254,6 +255,13 @@ function App() {
 <Route
   path="/admin/users/:userId"
   element={<UserDetails />}
+/>
+<Route
+
+  path="/admin/reviews"
+
+  element={<Reviews />}
+
 />
       {/* ==========================================
           404
