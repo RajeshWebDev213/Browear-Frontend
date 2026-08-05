@@ -78,6 +78,7 @@ import AccountLayout from "./layouts/AccountLayout";
 import Account from "./Pages/Profile/Account";
 import EditProfile from "./Pages/Profile/EditProfile";
 import MyOrders from "./Pages/Profile/MyOrders";
+import OrderDetails from "./Pages/Profile/OrderDetails";
 function App() {
 
   return (
