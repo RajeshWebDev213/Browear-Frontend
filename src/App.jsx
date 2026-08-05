@@ -66,6 +66,7 @@ import Users from "./Pages/Admin/Users";
 import UserDetails from "./Pages/Admin/OrderDetails";
 import Reviews from "./Pages/Admin/Reviews";
 import ReviewDetails from "./Pages/Admin/ReviwDetails";
+import Settings from "./Pages/Admin/Settings";
 function App() {
   return (
     <Routes>
@@ -269,6 +270,13 @@ function App() {
   path="/admin/reviews/:reviewId"
 
   element={<ReviewDetails />}
+
+/>
+<Route
+
+  path="/admin/settings"
+
+  element={<Settings />}
 
 />
       {/* ==========================================
