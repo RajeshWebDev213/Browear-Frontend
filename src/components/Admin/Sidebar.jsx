@@ -7,7 +7,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-
+import { ShoppingBag } from "lucide-react";
 import {
   NavLink,
   useNavigate,

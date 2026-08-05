@@ -60,6 +60,7 @@ import Dashboard from "./Pages/Admin/Dashboard";
 import Products from "./Pages/Admin/Products";
 import AddProduct from "./Pages/Admin/AddProduct";
 import EditProduct from "./Pages/Admin/EditProduct";
+import Orders from "./Pages/Admin/Orders";
 function App() {
   return (
     <Routes>
@@ -225,6 +226,13 @@ function App() {
 <Route
   path="/admin/products/edit/:id"
   element={<EditProduct />}
+/>
+<Route
+
+  path="/admin/orders"
+
+  element={<Orders />}
+
 />
       {/* ==========================================
           404
