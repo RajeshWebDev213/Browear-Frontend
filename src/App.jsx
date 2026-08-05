@@ -76,11 +76,16 @@ import NotFound from "./Pages/NotFound";
 import AccountLayout from "./layouts/AccountLayout";
 
 import Account from "./Pages/Profile/Account";
+import EditProfile from "./Pages/Profile/EditProfile";
 function App() {
 
   return (
 
     <Routes>
+      <Route
+  path="edit"
+  element={<EditProfile />}
+/>
             {/* ==========================================
           Authentication Routes
       ========================================== */}
