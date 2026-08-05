@@ -12,19 +12,25 @@ import {
   NavLink,
   useNavigate,
 } from "react-router-dom";
-
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { showSuccess } from "../../utils/toast";
 function Sidebar() {
 
   const navigate = useNavigate();
+  const {logout} = useContext(AuthContext);
+const handleLogout = () => {
 
-  const handleLogout = () => {
+  logout();
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  showSuccess(
+    "Logged out successfully"
+  );
 
-    navigate("/login");
+  navigate("/login");
 
-  };
+};
 
   const menuItems = [
 
@@ -181,29 +187,31 @@ function Sidebar() {
         "
       >
 
-        <button
+<button
 
-          onClick={handleLogout}
+  onClick={handleLogout}
 
-          className="
-          w-full
-          flex
-          items-center
-          gap-4
-          px-4
-          py-3
-          rounded-xl
-          hover:bg-red-600
-          transition
-          "
+  className="
+  w-full
+  mt-auto
+  flex
+  items-center
+  gap-3
+  px-4
+  py-3
+  rounded-xl
+  text-red-600
+  hover:bg-red-50
+  transition
+  "
 
-        >
+>
 
-          <LogOut size={20} />
+  <LogOut size={20} />
 
-          Logout
+  Logout
 
-        </button>
+</button>
 
       </div>
 

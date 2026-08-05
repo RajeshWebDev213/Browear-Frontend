@@ -1,28 +1,29 @@
 import { Navigate } from "react-router-dom";
 
-import { useAuth } from "../hooks/useAuth";
+function AdminRoute({
 
-import FullScreenLoader from "../components/common/FullScreenLoader";
+  children,
 
-function AdminRoute({ children }) {
+}) {
 
-  const { user, loading } = useAuth();
+  const token =
+    localStorage.getItem("token");
 
-  if (loading) {
+  const user = JSON.parse(
 
-    return <FullScreenLoader />;
+    localStorage.getItem("user")
 
-  }
+  );
 
-  if (!user) {
+  if (
 
-    return <Navigate to="/login" replace />;
+    !token ||
 
-  }
+    user?.role !== "admin"
 
-  if (user.role !== "admin") {
+  ) {
 
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" />;
 
   }
 
