@@ -79,6 +79,7 @@ import Account from "./Pages/Profile/Account";
 import EditProfile from "./Pages/Profile/EditProfile";
 import MyOrders from "./Pages/Profile/MyOrders";
 import OrderDetails from "./Pages/Profile/OrderDetails";
+import ChangePassword from "./Pages/Profile/ChangePassword";
 function App() {
 
   return (
@@ -321,7 +322,7 @@ function App() {
 />
   <Route
     path="change-password"
-    element={<div>Change Password</div>}
+    element={<ChangePassword/>}
   />
 
 </Route>
