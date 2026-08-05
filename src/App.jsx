@@ -81,21 +81,6 @@ function App() {
   return (
 
     <Routes>
-    <Route
-  path="/account"
-  element={
-    <ProtectedRoute>
-      <AccountLayout />
-    </ProtectedRoute>
-  }
->
-
-  <Route
-    index
-    element={<Account />}
-  />
-
-</Route>
             {/* ==========================================
           Authentication Routes
       ========================================== */}
@@ -305,7 +290,31 @@ function App() {
             {/* ==========================================
           Admin Routes
       ========================================== */}
+<Route
+  path="/account"
+  element={
+    <ProtectedRoute>
+      <AccountLayout />
+    </ProtectedRoute>
+  }
+>
 
+  <Route
+    index
+    element={<Account />}
+  />
+
+  <Route
+    path="orders"
+    element={<div>Orders</div>}
+  />
+
+  <Route
+    path="change-password"
+    element={<div>Change Password</div>}
+  />
+
+</Route>
       <Route
         path="/admin"
         element={
