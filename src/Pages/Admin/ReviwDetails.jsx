@@ -20,7 +20,7 @@ import {
 
 } from "../../utils/toast";
 
-import DeleteReviewModal from "../../components/admin/DeleteReviewModal";
+import DeleteReviewModal from "../../components/Admin/DeleteReviewModel";
 
 function ReviewDetails() {
 

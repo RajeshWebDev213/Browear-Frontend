@@ -7,7 +7,7 @@ import Loader from "../../components/common/Loader";
 import {
   getSingleUser,
   updateUserRole,
-  deleteUser,
+  adminDeleteUser,
 } from "../../services/profileService";
 
 import {
@@ -110,7 +110,7 @@ function UserDetails() {
 
       setDeleting(true);
 
-      await deleteUser(userId);
+      await adminDeleteUser(userId);
 
       showSuccess(
         "User Deleted Successfully"

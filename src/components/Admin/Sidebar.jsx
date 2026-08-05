@@ -7,13 +7,12 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import { ShoppingBag } from "lucide-react";
 import {
   NavLink,
   useNavigate,
 } from "react-router-dom";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { AuthContext } from "../../context/AuthContext";
 import { showSuccess } from "../../utils/toast";
 function Sidebar() {

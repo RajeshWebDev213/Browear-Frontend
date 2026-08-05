@@ -63,103 +63,340 @@ export default function Navbar() {
     item.label.toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
-    <>
-      {/* ================= NAVBAR ================= */}
+return (
 
-      <header className="sticky top-0 z-50 bg-zinc-950 backdrop-blur-xl border-b border-gray-200">
+  <>
 
-        <div className="max-w-7xl mx-auto h-20 px-6 flex items-center justify-between">
+    {/* ==========================================
+        NAVBAR
+    ========================================== */}
 
-          {/* Logo */}
+    <header
+      className="
+      sticky
+      top-0
+      z-50
+      bg-zinc-950
+      border-b
+      border-zinc-800
+      shadow-lg
+      "
+    >
 
-          <Link
-            to="/"
-            className="flex items-center gap-3"
+      <div
+        className="
+        max-w-7xl
+        mx-auto
+        h-16
+        px-4
+        flex
+        items-center
+        justify-between
+        "
+      >
+
+        {/* ================= Mobile Menu ================= */}
+
+        <div
+          className="
+          flex
+          items-center
+          gap-3
+          md:hidden
+          "
+        >
+
+          <button
+
+            onClick={() =>
+
+              setMobileMenu(
+
+                !mobileMenu
+
+              )
+
+            }
+
+            className="
+            text-white
+            transition
+            "
+
           >
 
-            <img
-              src={logo}
-              alt="logo"
-              className="w-11 h-11 object-contain"
+            {
+
+              mobileMenu
+
+                ?
+
+                <X size={28} />
+
+                :
+
+                <Menu size={28} />
+
+            }
+
+          </button>
+
+        </div>
+
+        {/* ================= Logo ================= */}
+
+        <Link
+
+          to="/"
+
+          className="
+          flex
+          items-center
+          gap-3
+          shrink-0
+          "
+
+        >
+
+          <img
+
+            src={logo}
+
+            alt="Logo"
+
+            className="
+            w-11
+            h-11
+            object-contain
+            "
+
+          />
+
+          <img
+
+            src={brand}
+
+            alt="Browear"
+
+            className="
+            hidden
+            md:block
+            h-9
+            "
+
+          />
+
+        </Link>
+
+        {/* ================= Desktop Search ================= */}
+
+        <div
+          className="
+          hidden
+          lg:flex
+          relative
+          flex-1
+          max-w-xl
+          mx-8
+          "
+        >
+
+          <div
+            className="
+            w-full
+            h-12
+            bg-zinc-100
+            rounded-full
+            flex
+            items-center
+            px-4
+            "
+          >
+
+            <Search
+
+              size={18}
+
+              className="text-gray-500"
+
             />
 
-            <img
-              src={brand}
-              alt="Browear"
-              className="hidden md:block h-9"
+            <input
+
+              type="text"
+
+              placeholder="Search for products..."
+
+              value={search}
+
+              onFocus={() =>
+                setShowSearch(true)
+              }
+
+              onBlur={() =>
+
+                setTimeout(() => {
+
+                  setShowSearch(false);
+
+                }, 200)
+
+              }
+
+              onChange={(e) =>
+
+                setSearch(
+
+                  e.target.value
+
+                )
+
+              }
+
+              className="
+              bg-transparent
+              outline-none
+              px-3
+              w-full
+              text-sm
+              "
+
             />
-
-          </Link>
-
-          {/* Search */}
-
-          <div className="hidden lg:flex relative">
-
-            <div className="flex items-center bg-gray-100 rounded-full px-4 h-12 w-[380px]">
-
-              <Search
-                size={18}
-                className="text-gray-500"
-              />
-
-              <input
-
-                type="text"
-
-                value={search}
-
-                placeholder="Search products..."
-
-                onFocus={() => setShowSearch(true)}
-
-                onChange={(e) =>
-                  setSearch(e.target.value)
-                }
-
-                className="
-                bg-transparent
-                outline-none
-                px-3
-                w-full
-                text-sm
-                placeholder:text-gray-400
-                "
-
-              />
-
-            </div>
-
-            {/* Search dropdown comes in Part 2 */}
 
           </div>
 
-          {/* Desktop Menu */}
+          {/* Search Dropdown */}
+                  {
 
-          <div className="hidden md:flex items-center gap-7">
+            showSearch &&
 
-            <Link
-              to="/wishlist"
-              className="
-              transition
-              hover:text-white
-              text-white
-              "
-            >
-              <Heart size={22} />
-            </Link>
+            search.length > 0 && (
 
-            <Link
-              to="/cart"
-              className="relative"
-            >
+              <div
+                className="
+                absolute
+                top-14
+                left-0
+                w-full
+                bg-white
+                rounded-2xl
+                shadow-2xl
+                border
+                border-gray-200
+                overflow-hidden
+                z-50
+                "
+              >
 
-              <ShoppingBag
-                size={22}
-                className="text-white"
-              />
+                {
 
-              {cartItems.length > 0 && (
+                  filteredData.length > 0 ? (
+
+                    filteredData.map((item, index) => (
+
+                      <button
+
+                        key={index}
+
+                        onMouseDown={() => {
+
+                          navigate(item.path);
+
+                          setSearch("");
+
+                          setShowSearch(false);
+
+                        }}
+
+                        className="
+                        w-full
+                        px-5
+                        py-3
+                        text-left
+                        hover:bg-gray-100
+                        transition
+                        "
+
+                      >
+
+                        {item.label}
+
+                      </button>
+
+                    ))
+
+                  ) : (
+
+                    <div
+                      className="
+                      px-5
+                      py-4
+                      text-gray-500
+                      "
+                    >
+
+                      No products found
+
+                    </div>
+
+                  )
+
+                }
+
+              </div>
+
+            )
+
+          }
+
+        </div>
+
+        {/* ================= Desktop Right ================= */}
+
+        <div
+          className="
+          hidden
+          md:flex
+          items-center
+          gap-6
+          "
+        >
+
+          <Link
+
+            to="/wishlist"
+
+            className="
+            text-white
+            hover:text-gray-300
+            transition
+            "
+
+          >
+
+            <Heart size={22} />
+
+          </Link>
+
+          <Link
+
+            to="/cart"
+
+            className="relative"
+
+          >
+
+            <ShoppingBag
+
+              size={22}
+
+              className="text-white"
+
+            />
+
+            {
+
+              cartItems.length > 0 && (
 
                 <span
                   className="
@@ -169,7 +406,7 @@ export default function Navbar() {
                   w-5
                   h-5
                   rounded-full
-                  bg-black
+                  bg-red-600
                   text-white
                   text-[10px]
                   flex
@@ -182,76 +419,104 @@ export default function Navbar() {
 
                 </span>
 
-              )}
+              )
 
-            </Link>
+            }
 
-            {!user ? (
+          </Link>
+
+          {
+
+            !user ? (
 
               <>
 
                 <Link
+
                   to="/login"
+
                   className="
                   text-white
-                  hover:text-white
+                  hover:text-gray-300
                   transition
                   "
+
                 >
+
                   Login
+
                 </Link>
 
                 <Link
+
                   to="/signup"
+
                   className="
-                  bg-black
-                  text-white
+                  bg-white
+                  text-black
                   px-5
-                  py-2.5
+                  py-2
                   rounded-full
-                  hover:bg-gray-900
+                  font-medium
+                  hover:bg-gray-200
                   transition
                   "
+
                 >
+
                   Signup
+
                 </Link>
 
               </>
 
             ) : (
 
-              <div className="flex items-center gap-5">
+              <div
+                className="
+                flex
+                items-center
+                gap-5
+                "
+              >
 
                 <Link
+
                   to="/account"
+
                   className="
                   flex
                   items-center
                   gap-2
-                  text-gray-700
-                  hover:text-black
-                  transition
+                  text-white
+                  hover:text-gray-300
                   "
+
                 >
 
                   <User size={20} />
 
                   <span className="hidden lg:block">
+
                     {user.fullname}
+
                   </span>
 
                 </Link>
 
                 <button
+
                   onClick={handleLogout}
+
                   className="
                   flex
                   items-center
                   gap-2
-                  text-red-500
-                  hover:text-red-600
+                  text-red-400
+                  hover:text-red-300
                   transition
                   "
+
                 >
 
                   <LogOut size={18} />
@@ -262,348 +527,643 @@ export default function Navbar() {
 
               </div>
 
-            )}
+            )
 
-          </div>
+          }
 
-          {/* Mobile Menu Button */}
+        </div>
+                {/* ================= Mobile Icons ================= */}
 
-          <button
+        <div
+          className="
+          flex
+          md:hidden
+          items-center
+          gap-4
+          "
+        >
 
-            onClick={() =>
-              setMobileMenu(!mobileMenu)
-            }
-
-            className="md:hidden"
-
+          <Link
+            to="/wishlist"
+            className="text-white"
           >
 
-            {mobileMenu ? (
-              <X size={28} />
-            ) : (
-              <Menu size={28} />
-            )}
+            <Heart size={22} />
 
-          </button>
+          </Link>
+
+          <Link
+            to="/cart"
+            className="relative"
+          >
+
+            <ShoppingBag
+              size={22}
+              className="text-white"
+            />
+
+            {
+
+              cartItems.length > 0 && (
+
+                <span
+                  className="
+                  absolute
+                  -top-2
+                  -right-2
+                  w-5
+                  h-5
+                  rounded-full
+                  bg-red-600
+                  text-white
+                  text-[10px]
+                  flex
+                  items-center
+                  justify-center
+                  "
+                >
+
+                  {cartItems.length}
+
+                </span>
+
+              )
+
+            }
+
+          </Link>
 
         </div>
 
-        {/* Mobile Menu & Search Dropdown will be added in Part 2 */}
+      </div>
 
-      </header>
-              {/* ================= SEARCH DROPDOWN ================= */}
+    </header>
 
-        {showSearch && search.length > 0 && (
+    {/* ==========================================
+        MOBILE MENU
+    ========================================== */}
+
+    {
+
+      mobileMenu && (
+
+        <>
+
+          {/* Overlay */}
+
+          <div
+
+            onClick={() =>
+              setMobileMenu(false)
+            }
+
+            className="
+            fixed
+            inset-0
+            bg-black/50
+            backdrop-blur-sm
+            z-40
+            md:hidden
+            "
+
+          />
+
+          {/* Menu */}
 
           <div
             className="
-            absolute
-            top-20
-            left-1/2
-            -translate-x-1/2
-            w-[380px]
+            fixed
+            top-16
+            left-0
+            w-full
+            h-[calc(100vh-64px)]
             bg-white
-            rounded-2xl
-            shadow-2xl
-            border
-            border-gray-100
-            overflow-hidden
-            hidden
-            lg:block
+            z-50
+            overflow-y-auto
+            md:hidden
             "
           >
 
-            {filteredData.length > 0 ? (
+            <div className="p-5">
 
-              filteredData.map((item, index) => (
+              {/* Search */}
 
-                <button
+              <div className="relative">
 
-                  key={index}
+                <Search
+                  size={18}
+                  className="
+                  absolute
+                  left-4
+                  top-1/2
+                  -translate-y-1/2
+                  text-gray-500
+                  "
+                />
 
-                  onMouseDown={() => {
+                <input
 
-                    navigate(item.path);
+                  type="text"
 
-                    setSearch("");
+                  value={search}
 
-                    setShowSearch(false);
+                  placeholder="Search products..."
 
-                  }}
+                  onChange={(e)=>
+
+                    setSearch(
+                      e.target.value
+                    )
+
+                  }
 
                   className="
                   w-full
-                  text-left
-                  px-5
-                  py-3
-                  hover:bg-gray-50
-                  transition
+                  h-12
+                  pl-11
+                  pr-4
+                  border
+                  rounded-xl
+                  outline-none
+                  focus:border-black
                   "
 
-                >
-
-                  {item.label}
-
-                </button>
-
-              ))
-
-            ) : (
-
-              <div className="p-5 text-gray-500">
-
-                No products found
+                />
 
               </div>
 
-            )}
+              {/* Search Result */}
 
-          </div>
+              {
 
-        )}
+                search.length > 0 && (
 
-        {/* ================= MOBILE MENU ================= */}
+                  <div
+                    className="
+                    mt-3
+                    border
+                    rounded-xl
+                    overflow-hidden
+                    "
+                  >
 
-        {mobileMenu && (
+                    {
 
-          <div
-            className="
-            md:hidden
-            border-t
-            border-gray-200
-            bg-white
-            px-6
-            py-6
-            space-y-5
-            "
-          >
+                      filteredData.length > 0 ? (
 
-            {/* Mobile Search */}
+                        filteredData.map(
 
-            <div className="flex items-center bg-gray-100 rounded-full px-4 h-11">
+                          (item,index)=>(
 
-              <Search
-                size={18}
-                className="text-gray-500"
-              />
+                            <button
 
-              <input
+                              key={index}
 
-                value={search}
+                              onClick={()=>{
 
-                onChange={(e) =>
-                  setSearch(e.target.value)
-                }
+                                navigate(item.path);
 
-                placeholder="Search..."
+                                setSearch("");
 
-                className="
-                bg-transparent
-                outline-none
-                px-3
-                w-full
-                text-sm
-                "
+                                setMobileMenu(false);
 
-              />
+                              }}
 
-            </div>
+                              className="
+                              w-full
+                              px-4
+                              py-3
+                              text-left
+                              hover:bg-gray-100
+                              transition
+                              "
 
-            {/* Search Result */}
+                            >
 
-            {search.length > 0 && (
+                              {item.label}
 
-              <div className="rounded-xl border border-gray-200 overflow-hidden">
+                            </button>
 
-                {filteredData.length > 0 ? (
+                          )
 
-                  filteredData.map((item, index) => (
+                        )
 
-                    <button
+                      ) : (
 
-                      key={index}
+                        <div
+                          className="
+                          p-4
+                          text-gray-500
+                          "
+                        >
 
-                      onClick={() => {
+                          No products found
 
-                        navigate(item.path);
+                        </div>
 
-                        setSearch("");
+                      )
 
-                        setMobileMenu(false);
-
-                      }}
-
-                      className="
-                      w-full
-                      text-left
-                      px-4
-                      py-3
-                      hover:bg-gray-50
-                      "
-
-                    >
-
-                      {item.label}
-
-                    </button>
-
-                  ))
-
-                ) : (
-
-                  <div className="px-4 py-3 text-gray-500">
-
-                    No products found
+                    }
 
                   </div>
 
-                )}
+                )
 
-              </div>
+              }
 
-            )}
+              {/* Navigation */}
 
-            <Link
-
-              to="/wishlist"
-
-              className="
-              flex
-              items-center
-              gap-3
-              text-gray-700
-              "
-
-            >
-
-              <Heart size={20} />
-
-              Wishlist
-
-            </Link>
-
-            <Link
-
-              to="/cart"
-
-              className="
-              flex
-              items-center
-              justify-between
-              text-gray-700
-              "
-
-            >
-
-              <div className="flex items-center gap-3">
-
-                <ShoppingBag size={20} />
-
-                Cart
-
-              </div>
-
-              <span className="font-semibold">
-
-                {cartItems.length}
-
-              </span>
-
-            </Link>
-
-            {!user ? (
-
-              <>
+              <div className="mt-8 space-y-2">
 
                 <Link
 
-                  to="/login"
+                  to="/"
 
-                  className="
-                  block
-                  text-center
-                  border
-                  rounded-full
-                  py-3
-                  "
+                  onClick={()=>
 
-                >
+                    setMobileMenu(false)
 
-                  Login
-
-                </Link>
-
-                <Link
-
-                  to="/signup"
-
-                  className="
-                  block
-                  text-center
-                  rounded-full
-                  py-3
-                  bg-black
-                  text-white
-                  "
-
-                >
-
-                  Create Account
-
-                </Link>
-
-              </>
-
-            ) : (
-
-              <>
-
-                <Link
-
-                  to="/account"
+                  }
 
                   className="
                   flex
                   items-center
-                  gap-3
+                  justify-between
+                  px-4
+                  py-4
+                  rounded-xl
+                  hover:bg-gray-100
                   "
 
                 >
 
-                  <User size={20} />
+                  <span>
 
-                  {user.fullname}
+                    Home
+
+                  </span>
 
                 </Link>
 
-                <button
+                <Link
 
-                  onClick={handleLogout}
+                  to="/topwear"
+
+                  onClick={()=>
+
+                    setMobileMenu(false)
+
+                  }
 
                   className="
                   flex
                   items-center
-                  gap-3
-                  text-red-500
+                  justify-between
+                  px-4
+                  py-4
+                  rounded-xl
+                  hover:bg-gray-100
                   "
 
                 >
 
-                  <LogOut size={20} />
+                  <span>
 
-                  Logout
+                    Topwear
 
-                </button>
+                  </span>
 
-              </>
+                </Link>
 
-            )}
+                <Link
+
+                  to="/bottomwear"
+
+                  onClick={()=>
+
+                    setMobileMenu(false)
+
+                  }
+
+                  className="
+                  flex
+                  items-center
+                  justify-between
+                  px-4
+                  py-4
+                  rounded-xl
+                  hover:bg-gray-100
+                  "
+
+                >
+
+                  <span>
+
+                    Bottomwear
+
+                  </span>
+
+                </Link>
+
+                <Link
+
+                  to="/footwear"
+
+                  onClick={()=>
+
+                    setMobileMenu(false)
+
+                  }
+
+                  className="
+                  flex
+                  items-center
+                  justify-between
+                  px-4
+                  py-4
+                  rounded-xl
+                  hover:bg-gray-100
+                  "
+
+                >
+
+                  <span>
+
+                    Footwear
+
+                  </span>
+
+                </Link>
+                                <Link
+
+                  to="/wishlist"
+
+                  onClick={() =>
+
+                    setMobileMenu(false)
+
+                  }
+
+                  className="
+                  flex
+                  items-center
+                  justify-between
+                  px-4
+                  py-4
+                  rounded-xl
+                  hover:bg-gray-100
+                  "
+
+                >
+
+                  <span>
+
+                    Wishlist
+
+                  </span>
+
+                  <Heart size={20} />
+
+                </Link>
+
+                <Link
+
+                  to="/cart"
+
+                  onClick={() =>
+
+                    setMobileMenu(false)
+
+                  }
+
+                  className="
+                  flex
+                  items-center
+                  justify-between
+                  px-4
+                  py-4
+                  rounded-xl
+                  hover:bg-gray-100
+                  "
+
+                >
+
+                  <span>
+
+                    Cart
+
+                  </span>
+
+                  <div className="flex items-center gap-3">
+
+                    {
+
+                      cartItems.length > 0 && (
+
+                        <span
+                          className="
+                          bg-red-600
+                          text-white
+                          text-xs
+                          w-5
+                          h-5
+                          rounded-full
+                          flex
+                          items-center
+                          justify-center
+                          "
+                        >
+
+                          {cartItems.length}
+
+                        </span>
+
+                      )
+
+                    }
+
+                    <ShoppingBag size={20} />
+
+                  </div>
+
+                </Link>
+
+              </div>
+
+              <div className="border-t mt-8 pt-6">
+
+                {
+
+                  !user ? (
+
+                    <div className="space-y-3">
+
+                      <Link
+
+                        to="/login"
+
+                        onClick={() =>
+
+                          setMobileMenu(false)
+
+                        }
+
+                        className="
+                        block
+                        w-full
+                        text-center
+                        border
+                        border-gray-300
+                        rounded-xl
+                        py-3
+                        font-medium
+                        "
+
+                      >
+
+                        Login
+
+                      </Link>
+
+                      <Link
+
+                        to="/signup"
+
+                        onClick={() =>
+
+                          setMobileMenu(false)
+
+                        }
+
+                        className="
+                        block
+                        w-full
+                        text-center
+                        bg-black
+                        text-white
+                        rounded-xl
+                        py-3
+                        font-medium
+                        "
+
+                      >
+
+                        Create Account
+
+                      </Link>
+
+                    </div>
+
+                  ) : (
+
+                    <div className="space-y-5">
+
+                      <Link
+
+                        to="/account"
+
+                        onClick={() =>
+
+                          setMobileMenu(false)
+
+                        }
+
+                        className="
+                        flex
+                        items-center
+                        gap-3
+                        "
+
+                      >
+
+                        <div
+                          className="
+                          w-12
+                          h-12
+                          rounded-full
+                          bg-black
+                          text-white
+                          flex
+                          items-center
+                          justify-center
+                          "
+                        >
+
+                          <User size={22} />
+
+                        </div>
+
+                        <div>
+
+                          <p className="font-semibold">
+
+                            {user.fullname}
+
+                          </p>
+
+                          <p className="text-sm text-gray-500">
+
+                            {user.email}
+
+                          </p>
+
+                        </div>
+
+                      </Link>
+
+                      <button
+
+                        onClick={() => {
+
+                          handleLogout();
+
+                          setMobileMenu(false);
+
+                        }}
+
+                        className="
+                        w-full
+                        flex
+                        items-center
+                        justify-center
+                        gap-2
+                        py-3
+                        rounded-xl
+                        bg-red-50
+                        text-red-600
+                        hover:bg-red-100
+                        transition
+                        "
+
+                      >
+
+                        <LogOut size={18} />
+
+                        Logout
+
+                      </button>
+
+                    </div>
+
+                  )
+
+                }
+
+              </div>
+
+            </div>
 
           </div>
 
-        )}
+        </>
 
-      </>
-  );
+      )
+
+    }
+
+  </>
+
+);
+
 
 }

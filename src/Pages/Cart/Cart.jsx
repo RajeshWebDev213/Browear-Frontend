@@ -6,7 +6,7 @@ import CartCard from "../../components/Cart/CartCard";
 import OrderSummary from "../../components/Cart/OrderSummary";
 
 import emptyCart from "../../assets/images/cart.png";
-
+import { useContext } from "react";
 function Cart() {
 
   const {
@@ -17,7 +17,7 @@ function Cart() {
 
     updateQuantity,
 
-  } = useCart();
+  } = useContext(CartContext);
 
   const subtotal = cartItems.reduce(
 

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { WishlistContext } from "../../context/wishlistContext";
-
+import { useContext } from "react";
 function Wishlist() {
-  const { wishlist, removeFromWishlist } = WishlistContext();
+  const { wishlist, removeFromWishlist } = useContext(WishlistContext);
 
   // EMPTY STATE
   if (wishlist.length === 0) {

@@ -1,5 +1,7 @@
 import api from "./api";
 
+
+
 /*
 =========================================
 GET PRODUCT REVIEWS
@@ -88,6 +90,22 @@ export const adminDeleteReview = async (
 
   const res = await api.delete(
     `/reviews/admin/${reviewId}`
+  );
+
+  return res.data;
+
+};
+
+/*
+=========================================
+ADMIN GET ALL REVIEWS
+=========================================
+*/
+
+export const getAllReviews = async () => {
+
+  const res = await api.get(
+    "/reviews/admin/all"
   );
 
   return res.data;

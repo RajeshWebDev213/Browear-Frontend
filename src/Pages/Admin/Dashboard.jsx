@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import DashboardCard from "../../components/admin/DashboardCard";
 import SalesChart from "../../components/admin/SalesChart";
 import RevenueCard from "../../components/admin/RevenueCard";
-import OrderStatusCard from "../../components/admin/OrderStatusCard";
+import OrderStatusCard from "../../components/Admin/OrderSatusCard";
 import OrdersTable from "../../components/admin/OrdersTable";
 import UsersTable from "../../components/admin/UsersTable";
 import Loader from "../../components/common/Loader";
