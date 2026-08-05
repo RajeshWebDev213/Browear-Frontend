@@ -3,90 +3,95 @@ import {
   ShoppingCart,
   Users,
   Package,
-  TrendingUp,
 } from "lucide-react";
 
-import DashboardCard from "../../components/admin/DashboardCard";
 import { useEffect, useState } from "react";
+
+import DashboardCard from "../../components/admin/DashboardCard";
+import SalesChart from "../../components/admin/SalesChart";
+import RevenueCard from "../../components/admin/RevenueCard";
+import OrderStatusCard from "../../components/admin/OrderStatusCard";
+import OrdersTable from "../../components/admin/OrdersTable";
+import UsersTable from "../../components/admin/UsersTable";
+import Loader from "../../components/common/Loader";
 
 import {
   getDashboardOverview,
-} from "../../services/dashboardService";
-import SalesChart from "../../components/admin/SalesChart";
-
-import {
   getMonthlySales,
-} from "../../services/dashboardService";
-import RevenueCard from "../../components/admin/RevenueCard";
-
-import {
   getRevenueAnalytics,
-} from "../../services/dashboardService";
-import OrderStatusCard
-from "../../components/admin/OrderStatusCard";
-
-import {
   getOrderStatusAnalytics,
-} from "../../services/dashboardService";
-import OrdersTable
-from "../../components/admin/OrdersTable";
-
-import {
   getRecentOrders,
-} from "../../services/dashboardService";
-
-import UsersTable
-from "../../components/admin/UsersTable";
-
-import {
   getRecentUsers,
 } from "../../services/dashboardService";
-
-import Loader from "../../components/common/Loader";
 function Dashboard() {
 const [overview, setOverview] = useState(null);
-const [revenue, setRevenue] =
-useState(null);
-const [recentOrders, setRecentOrders] =
-useState([]);
-const [loading, setLoading] =
-useState(true);
-const [recentUsers, setRecentUsers] =
-useState([]);
+
 const [monthlySales, setMonthlySales] =
-useState([]);
+  useState([]);
+
+const [revenue, setRevenue] =
+  useState(null);
+
 const [orderStatus, setOrderStatus] =
-useState({});
+  useState({});
+
+const [recentOrders, setRecentOrders] =
+  useState([]);
+
+const [recentUsers, setRecentUsers] =
+  useState([]);
+
+const [loading, setLoading] =
+  useState(true);
 useEffect(() => {
 
   const fetchDashboard = async () => {
 
     try {
 
-      const data =
-        await getDashboardOverview();
+      setLoading(true);
 
-      setOverview(data);
-      const sales =
-await getMonthlySales();
+      const [
 
-setMonthlySales(sales);
-const revenueData =
-await getRevenueAnalytics();
+        overviewData,
 
-setRevenue(revenueData);
-const status =
-await getOrderStatusAnalytics();
+        salesData,
 
-setOrderStatus(status);
-const orders =
-await getRecentOrders();
+        revenueData,
 
-setRecentOrders(orders);
-const users =
-await getRecentUsers();
+        statusData,
 
-setRecentUsers(users);
+        ordersData,
+
+        usersData,
+
+      ] = await Promise.all([
+
+        getDashboardOverview(),
+
+        getMonthlySales(),
+
+        getRevenueAnalytics(),
+
+        getOrderStatusAnalytics(),
+
+        getRecentOrders(),
+
+        getRecentUsers(),
+
+      ]);
+
+      setOverview(overviewData);
+
+      setMonthlySales(salesData);
+
+      setRevenue(revenueData);
+
+      setOrderStatus(statusData);
+
+      setRecentOrders(ordersData);
+
+      setRecentUsers(usersData);
 
     } catch (error) {
 
@@ -108,228 +113,239 @@ if (loading) {
   return <Loader />;
 
 }
-  return (
+return (
 
-    <div className="space-y-8">
+  <div className="space-y-8">
 
-      {/* Header */}
+    {/* Header */}
 
-      <div>
+    <div>
 
-        <h1 className="text-3xl font-bold">
+      <h1 className="text-3xl font-bold">
 
-          Dashboard
+        Dashboard
 
-        </h1>
+      </h1>
 
-        <p className="text-gray-500 mt-2">
+      <p className="text-gray-500 mt-2">
 
-          Welcome back, Admin 👋
+        Welcome back, Admin 👋
 
-        </p>
+      </p>
 
-      </div>
+    </div>
 
-      {/* Cards */}
-      <div
-  className="
-  grid
-  lg:grid-cols-2
-  gap-6
-  mt-6
-  "
->
+    {/* Overview Cards */}
 
-  <SalesChart
-    data={monthlySales}
-  />
+    <div
+      className="
+      grid
+      grid-cols-1
+      sm:grid-cols-2
+      xl:grid-cols-4
+      gap-6
+      "
+    >
 
-  <OrderStatusCard
-    status={orderStatus}
-  />
+      <DashboardCard
 
-</div>
+        title="Revenue"
 
-      <div
-        className="
-        grid
-        grid-cols-1
-        sm:grid-cols-2
-        xl:grid-cols-4
-        gap-6
-        "
-      >
+        value={`₹${overview?.totalRevenue || 0}`}
 
-        <DashboardCard
-          title="Revenue"
-         value={`₹${overview?.totalRevenue || 0}`}
-          icon={DollarSign}
-          color="bg-green-100"
-          iconColor="text-green-600"
-        />
+        icon={DollarSign}
 
-        <DashboardCard
-          title="Orders"
-          value={overview?.totalOrders || 0}
-          icon={ShoppingCart}
-          color="bg-blue-100"
-          iconColor="text-blue-600"
-        />
+        color="bg-green-100"
 
-        <DashboardCard
-          title="Users"
-          value={overview?.totalUsers || 0}
-          icon={Users}
-          color="bg-purple-100"
-          iconColor="text-purple-600"
-        />
+        iconColor="text-green-600"
 
-        <DashboardCard
-          title="Products"
-          value={overview?.totalProducts || 0}
-          icon={Package}
-          color="bg-orange-100"
-          iconColor="text-orange-600"
-        />
+      />
 
-      </div>
+      <DashboardCard
 
-      {/* Analytics */}
+        title="Orders"
 
-      <div
-        className="
-        grid
-        lg:grid-cols-2
-        gap-6
-        "
-      >
+        value={overview?.totalOrders || 0}
 
-        <div
-          className="
-          bg-white
-          rounded-2xl
-          shadow-sm
-          border
-          border-gray-200
-          h-96
-          p-6
-          "
-        >
+        icon={ShoppingCart}
 
-          <h2 className="text-xl font-semibold">
+        color="bg-blue-100"
 
-            Sales Analytics
+        iconColor="text-blue-600"
 
-          </h2>
+      />
 
-          
-      
+      <DashboardCard
 
-           <SalesChart
-    data={monthlySales}
-/>
+        title="Users"
 
-        
+        value={overview?.totalUsers || 0}
 
-        </div>
+        icon={Users}
 
-        <div
-          className="
-          bg-white
-          rounded-2xl
-          shadow-sm
-          border
-          border-gray-200
-          h-96
-          p-6
-          "
-        >
+        color="bg-purple-100"
 
-          <h2 className="text-xl font-semibold">
+        iconColor="text-purple-600"
 
-            Revenue Growth
+      />
 
-          </h2>
-<RevenueCard
+      <DashboardCard
 
-  totalRevenue={
-    revenue?.totalRevenue || 0
-  }
+        title="Products"
 
-  averageOrderValue={
-    revenue?.averageOrderValue || 0
-  }
+        value={overview?.totalProducts || 0}
 
-  growth={
-    revenue?.growth || 0
-  }
+        icon={Package}
 
-/>
+        color="bg-orange-100"
 
-        </div>
+        iconColor="text-orange-600"
 
-      </div>
+      />
 
-      {/* Bottom */}
+    </div>
+
+    {/* Charts */}
+
+    <div
+      className="
+      grid
+      lg:grid-cols-2
+      gap-6
+      "
+    >
 
       <div
         className="
-        grid
-        lg:grid-cols-2
-        gap-6
+        bg-white
+        rounded-2xl
+        shadow-sm
+        border
+        border-gray-200
+        p-6
         "
       >
 
-        <div
-          className="
-          bg-white
-          rounded-2xl
-          shadow-sm
-          border
-          border-gray-200
-          p-6
-          "
-        >
+        <h2 className="text-xl font-semibold mb-5">
 
-          <h2 className="font-semibold text-lg">
+          Monthly Sales
 
-            Recent Orders
+        </h2>
 
-          </h2>
+        <SalesChart
+          data={monthlySales}
+        />
 
-       <OrdersTable
-    orders={recentOrders}
-/>
+      </div>
 
-        </div>
+      <div
+        className="
+        bg-white
+        rounded-2xl
+        shadow-sm
+        border
+        border-gray-200
+        p-6
+        "
+      >
 
-        <div
-          className="
-          bg-white
-          rounded-2xl
-          shadow-sm
-          border
-          border-gray-200
-          p-6
-          "
-        >
+        <h2 className="text-xl font-semibold mb-5">
 
-          <h2 className="font-semibold text-lg">
+          Order Status
 
-            Recent Users
+        </h2>
 
-          </h2>
-<UsersTable
-    users={recentUsers}
-/>
-
-        </div>
+        <OrderStatusCard
+          status={orderStatus}
+        />
 
       </div>
 
     </div>
 
-  );
+    {/* Revenue */}
+
+    <RevenueCard
+
+      totalRevenue={
+        revenue?.totalRevenue || 0
+      }
+
+      averageOrderValue={
+        revenue?.averageOrderValue || 0
+      }
+
+      growth={
+        revenue?.growth || 0
+      }
+
+    />
+
+    {/* Bottom Section */}
+
+    <div
+      className="
+      grid
+      lg:grid-cols-2
+      gap-6
+      "
+    >
+
+      <div
+        className="
+        bg-white
+        rounded-2xl
+        shadow-sm
+        border
+        border-gray-200
+        p-6
+        "
+      >
+
+        <h2 className="text-xl font-semibold mb-5">
+
+          Recent Orders
+
+        </h2>
+
+        <OrdersTable
+
+          orders={recentOrders}
+
+        />
+
+      </div>
+
+      <div
+        className="
+        bg-white
+        rounded-2xl
+        shadow-sm
+        border
+        border-gray-200
+        p-6
+        "
+      >
+
+        <h2 className="text-xl font-semibold mb-5">
+
+          Recent Users
+
+        </h2>
+
+        <UsersTable
+
+          users={recentUsers}
+
+        />
+
+      </div>
+
+    </div>
+
+  </div>
+
+);
 
 }
 
