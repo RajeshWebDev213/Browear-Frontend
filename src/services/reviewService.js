@@ -96,6 +96,23 @@ export const adminDeleteReview = async (
 
 /*
 =========================================
+ADMIN GET SINGLE REVIEW
+=========================================
+*/
+
+export const getReviewById = async (
+  reviewId
+) => {
+
+  const res = await api.get(
+    `/reviews/admin/${reviewId}`
+  );
+
+  return res.data;
+
+};
+/*
+=========================================
 GET REVIEW STATISTICS (ADMIN)
 =========================================
 */

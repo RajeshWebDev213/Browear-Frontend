@@ -65,6 +65,7 @@ import OrderDetails from "./Pages/Admin/OrderDetails";
 import Users from "./Pages/Admin/Users";
 import UserDetails from "./Pages/Admin/OrderDetails";
 import Reviews from "./Pages/Admin/Reviews";
+import ReviewDetails from "./Pages/Admin/ReviwDetails";
 function App() {
   return (
     <Routes>
@@ -261,6 +262,13 @@ function App() {
   path="/admin/reviews"
 
   element={<Reviews />}
+
+/>
+<Route
+
+  path="/admin/reviews/:reviewId"
+
+  element={<ReviewDetails />}
 
 />
       {/* ==========================================
