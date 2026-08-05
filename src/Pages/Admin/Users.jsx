@@ -6,7 +6,8 @@ import UsersTable from "../../components/admin/UsersTable";
 import {
   getAllUsers,
 } from "../../services/profileService";
-
+import UserStatsCard
+from "../../components/admin/UserStatsCard";
 function Users() {
 
   const [users, setUsers] =
@@ -119,6 +120,41 @@ const totalPages = Math.ceil(
         </p>
 
       </div>
+      <div className="grid grid-cols-3 gap-6">
+
+  <UserStatsCard
+
+    title="Total Users"
+
+    value={users.length}
+
+  />
+
+  <UserStatsCard
+
+    title="Admins"
+
+    value={
+      users.filter(
+        user => user.role === "admin"
+      ).length
+    }
+
+  />
+
+  <UserStatsCard
+
+    title="Customers"
+
+    value={
+      users.filter(
+        user => user.role === "user"
+      ).length
+    }
+
+  />
+
+</div>
       <div className="flex gap-4 mb-6">
 
   <input

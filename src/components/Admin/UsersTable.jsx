@@ -1,5 +1,5 @@
 import { Eye } from "lucide-react";
-
+import { Link } from "react-router-dom";
 function UsersTable({ users = [] }) {
 
   return (
@@ -75,18 +75,25 @@ function UsersTable({ users = [] }) {
 
                 <tr>
 
-                  <td
-                    colSpan="5"
-                    className="
-                    py-10
-                    text-center
-                    text-gray-500
-                    "
-                  >
+          <td colSpan="5">
 
-                    No Users Found
+  <div className="py-16 text-center">
 
-                  </td>
+    <h2 className="text-xl font-semibold">
+
+      No Users Found
+
+    </h2>
+
+    <p className="text-gray-500 mt-2">
+
+      Try another search.
+
+    </p>
+
+  </div>
+
+</td>
 
                 </tr>
 
@@ -111,15 +118,24 @@ function UsersTable({ users = [] }) {
                           user.avatar ? (
 
                             <img
-                              src={user.avatar}
-                              alt={user.fullname}
-                              className="
-                              w-10
-                              h-10
-                              rounded-full
-                              object-cover
-                              "
-                            />
+
+  src={
+    user.avatar ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      user.fullname || "User"
+    )}`
+  }
+
+  alt={user.fullname}
+
+  className="
+  w-10
+  h-10
+  rounded-full
+  object-cover
+  "
+
+/>
 
                           ) : (
 
@@ -205,21 +221,31 @@ function UsersTable({ users = [] }) {
 
                     </td>
 
-                    <td className="text-center">
+<td className="text-center">
 
-                      <button
-                        className="
-                        p-2
-                        rounded-lg
-                        hover:bg-gray-100
-                        "
-                      >
+  <Link
 
-                        <Eye size={18} />
+    to={`/admin/users/${user._id}`}
 
-                      </button>
+    className="
+    inline-flex
+    p-2
+    rounded-lg
+    bg-blue-100
+    hover:bg-blue-200
+    transition
+    "
 
-                    </td>
+  >
+
+    <Eye
+      size={18}
+      className="text-blue-600"
+    />
+
+  </Link>
+
+</td>
 
                   </tr>
 
