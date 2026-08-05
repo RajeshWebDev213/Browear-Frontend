@@ -5,6 +5,7 @@ import {
   getProfile,
 
   updateProfile,
+  changePassword,
 
 } from "../../services/profileService";
 
@@ -28,6 +29,19 @@ function Settings() {
 
   const [saving, setSaving] =
     useState(false);
+    const [passwords, setPasswords] =
+useState({
+
+  currentPassword: "",
+
+  newPassword: "",
+
+  confirmPassword: "",
+
+});
+
+const [passwordLoading, setPasswordLoading] =
+useState(false);
 
   const fetchProfile = async () => {
 
@@ -101,6 +115,75 @@ function Settings() {
     }
 
   };
+  const handlePasswordChange = async (
+  e
+) => {
+
+  e.preventDefault();
+
+  if (
+
+    passwords.newPassword !==
+
+    passwords.confirmPassword
+
+  ) {
+
+    showError(
+      "Passwords do not match"
+    );
+
+    return;
+
+  }
+
+  try {
+
+    setPasswordLoading(true);
+
+    await changePassword({
+
+      currentPassword:
+        passwords.currentPassword,
+
+      newPassword:
+        passwords.newPassword,
+
+    });
+
+    showSuccess(
+      "Password Changed Successfully"
+    );
+
+    setPasswords({
+
+      currentPassword: "",
+
+      newPassword: "",
+
+      confirmPassword: "",
+
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    showError(
+
+      error.response?.data?.message ||
+
+      "Failed to change password"
+
+    );
+
+  } finally {
+
+    setPasswordLoading(false);
+
+  }
+
+};
 
   if (loading) {
 
@@ -277,6 +360,156 @@ function Settings() {
           </button>
 
         </form>
+        <div
+  className="
+  bg-white
+  rounded-2xl
+  border
+  p-8
+  mt-8
+  "
+>
+
+  <h2 className="text-2xl font-bold mb-6">
+
+    Change Password
+
+  </h2>
+
+  <form
+
+    onSubmit={handlePasswordChange}
+
+    className="space-y-5"
+
+  >
+
+    <input
+
+      type="password"
+
+      placeholder="Current Password"
+
+      value={passwords.currentPassword}
+
+      onChange={(e) =>
+
+        setPasswords({
+
+          ...passwords,
+
+          currentPassword:
+            e.target.value,
+
+        })
+
+      }
+
+      className="
+      w-full
+      border
+      rounded-xl
+      px-4
+      py-3
+      "
+
+    />
+
+    <input
+
+      type="password"
+
+      placeholder="New Password"
+
+      value={passwords.newPassword}
+
+      onChange={(e) =>
+
+        setPasswords({
+
+          ...passwords,
+
+          newPassword:
+            e.target.value,
+
+        })
+
+      }
+
+      className="
+      w-full
+      border
+      rounded-xl
+      px-4
+      py-3
+      "
+
+    />
+
+    <input
+
+      type="password"
+
+      placeholder="Confirm Password"
+
+      value={passwords.confirmPassword}
+
+      onChange={(e) =>
+
+        setPasswords({
+
+          ...passwords,
+
+          confirmPassword:
+            e.target.value,
+
+        })
+
+      }
+
+      className="
+      w-full
+      border
+      rounded-xl
+      px-4
+      py-3
+      "
+
+    />
+
+    <button
+
+      type="submit"
+
+      disabled={passwordLoading}
+
+      className="
+      bg-black
+      text-white
+      px-6
+      py-3
+      rounded-xl
+      hover:bg-zinc-900
+      transition
+      "
+
+    >
+
+      {
+
+        passwordLoading
+
+          ? "Changing..."
+
+          : "Change Password"
+
+      }
+
+    </button>
+
+  </form>
+
+</div>
 
       </div>
 
