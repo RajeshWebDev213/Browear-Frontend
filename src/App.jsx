@@ -61,6 +61,9 @@ import Products from "./Pages/Admin/Products";
 import AddProduct from "./Pages/Admin/AddProduct";
 import EditProduct from "./Pages/Admin/EditProduct";
 import Orders from "./Pages/Admin/Orders";
+import OrderDetails from "./Pages/Admin/OrderDetails";
+import Users from "./Pages/Admin/Users";
+import UserDetails from "./Pages/Admin/OrderDetails";
 function App() {
   return (
     <Routes>
@@ -233,6 +236,24 @@ function App() {
 
   element={<Orders />}
 
+/>
+<Route
+
+  path="/admin/orders/:id"
+
+  element={<OrderDetails />}
+
+/>
+<Route
+
+  path="/admin/users"
+
+  element={<Users />}
+
+/>
+<Route
+  path="/admin/users/:userId"
+  element={<UserDetails />}
 />
       {/* ==========================================
           404

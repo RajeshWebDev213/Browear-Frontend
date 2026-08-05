@@ -1,6 +1,14 @@
-import { Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
-function OrdersTable({ orders = [] }) {
+import {
+  Eye,
+} from "lucide-react";
+
+function UsersTable({
+
+  users = [],
+
+}) {
 
   return (
 
@@ -11,41 +19,49 @@ function OrdersTable({ orders = [] }) {
       border
       border-gray-200
       shadow-sm
-      p-6
+      overflow-hidden
       "
     >
-
-      <div className="flex items-center justify-between mb-6">
-
-        <h2 className="text-xl font-semibold">
-
-          Recent Orders
-
-        </h2>
-
-      </div>
 
       <div className="overflow-x-auto">
 
         <table className="w-full">
 
-          <thead>
+          <thead className="bg-gray-50">
 
-            <tr className="border-b">
+            <tr>
 
-              <th className="text-left py-3">Order ID</th>
+              <th className="px-6 py-4 text-left">
 
-              <th className="text-left py-3">Customer</th>
+                Name
 
-              <th className="text-left py-3">Amount</th>
+              </th>
 
-              <th className="text-left py-3">Payment</th>
+              <th className="px-6 py-4 text-left">
 
-              <th className="text-left py-3">Status</th>
+                Email
 
-              <th className="text-left py-3">Date</th>
+              </th>
 
-              <th className="text-center py-3">
+              <th className="px-6 py-4 text-left">
+
+                Phone
+
+              </th>
+
+              <th className="px-6 py-4 text-left">
+
+                Role
+
+              </th>
+
+              <th className="px-6 py-4 text-left">
+
+                Joined
+
+              </th>
+
+              <th className="px-6 py-4 text-center">
 
                 Action
 
@@ -59,20 +75,20 @@ function OrdersTable({ orders = [] }) {
 
             {
 
-              orders.length === 0 ? (
+              users.length === 0 ? (
 
                 <tr>
 
                   <td
-                    colSpan="7"
+                    colSpan="6"
                     className="
+                    py-16
                     text-center
-                    py-10
                     text-gray-500
                     "
                   >
 
-                    No Orders Found
+                    No Users Found
 
                   </td>
 
@@ -80,35 +96,38 @@ function OrdersTable({ orders = [] }) {
 
               ) : (
 
-                orders.map((order) => (
+                users.map((user) => (
 
                   <tr
-                    key={order._id}
+
+                    key={user._id}
+
                     className="
-                    border-b
+                    border-t
                     hover:bg-gray-50
                     "
+
                   >
 
-                    <td className="py-4">
+                    <td className="px-6 py-4">
 
-                      #{order._id.slice(-6)}
-
-                    </td>
-
-                    <td>
-
-                      {order.user?.fullname}
+                      {user.fullname}
 
                     </td>
 
-                    <td>
+                    <td className="px-6 py-4">
 
-                      ₹{order.totalAmount}
+                      {user.email}
 
                     </td>
 
-                    <td>
+                    <td className="px-6 py-4">
+
+                      {user.phonenumber || "-"}
+
+                    </td>
+
+                    <td className="px-6 py-4">
 
                       <span
                         className={`
@@ -118,65 +137,60 @@ function OrdersTable({ orders = [] }) {
                         text-sm
 
                         ${
-                          order.paymentStatus === "Paid"
+                          user.role === "admin"
 
-                            ? "bg-green-100 text-green-700"
+                            ? "bg-purple-100 text-purple-700"
 
-                            : "bg-red-100 text-red-700"
+                            : "bg-gray-100 text-gray-700"
+
                         }
                         `}
                       >
 
-                        {order.paymentStatus}
+                        {user.role}
 
                       </span>
 
                     </td>
 
-                    <td>
-
-                      <span
-                        className="
-                        bg-blue-100
-                        text-blue-700
-                        px-3
-                        py-1
-                        rounded-full
-                        text-sm
-                        "
-                      >
-
-                        {order.orderStatus}
-
-                      </span>
-
-                    </td>
-
-                    <td>
+                    <td className="px-6 py-4">
 
                       {
 
                         new Date(
-                          order.createdAt
+                          user.createdAt
                         ).toLocaleDateString()
 
                       }
 
                     </td>
 
-                    <td className="text-center">
+                    <td className="px-6 py-4">
 
-                      <button
-                        className="
-                        p-2
-                        rounded-lg
-                        hover:bg-gray-100
-                        "
-                      >
+                      <div className="flex justify-center">
 
-                        <Eye size={18} />
+                        <Link
 
-                      </button>
+                          to={`/admin/users/${user._id}`}
+
+                          className="
+                          p-2
+                          rounded-lg
+                          bg-blue-100
+                          hover:bg-blue-200
+                          transition
+                          "
+
+                        >
+
+                          <Eye
+                            size={18}
+                            className="text-blue-600"
+                          />
+
+                        </Link>
+
+                      </div>
 
                     </td>
 
@@ -200,4 +214,4 @@ function OrdersTable({ orders = [] }) {
 
 }
 
-export default OrdersTable;
+export default UsersTable;
