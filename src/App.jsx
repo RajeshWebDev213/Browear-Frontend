@@ -72,11 +72,30 @@ import Settings from "./Pages/Admin/Settings";
 ========================================== */
 
 import NotFound from "./Pages/NotFound";
+
+import AccountLayout from "./layouts/AccountLayout";
+
+import Account from "./Pages/Profile/Account";
 function App() {
 
   return (
 
     <Routes>
+    <Route
+  path="/account"
+  element={
+    <ProtectedRoute>
+      <AccountLayout />
+    </ProtectedRoute>
+  }
+>
+
+  <Route
+    index
+    element={<Account />}
+  />
+
+</Route>
             {/* ==========================================
           Authentication Routes
       ========================================== */}
