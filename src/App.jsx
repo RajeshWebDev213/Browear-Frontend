@@ -77,6 +77,7 @@ import AccountLayout from "./layouts/AccountLayout";
 
 import Account from "./Pages/Profile/Account";
 import EditProfile from "./Pages/Profile/EditProfile";
+import MyOrders from "./Pages/Profile/MyOrders";
 function App() {
 
   return (
@@ -311,9 +312,12 @@ function App() {
 
   <Route
     path="orders"
-    element={<div>Orders</div>}
+    element={<MyOrders/>}
   />
-
+  <Route
+  path="orders/:id"
+  element={<OrderDetails />}
+/>
   <Route
     path="change-password"
     element={<div>Change Password</div>}
