@@ -28,13 +28,19 @@ function ProfileSidebar() {
   const { user, logout } =
     useContext(AuthContext);
 
-  const handleLogout = () => {
+const handleLogout = () => {
 
-    logout();
+  const confirmLogout = window.confirm(
+    "Are you sure you want to logout?"
+  );
 
-    navigate("/login");
+  if (!confirmLogout) return;
 
-  };
+  logout();
+
+  navigate("/login");
+
+};
 
   const navClass = ({ isActive }) => `
     flex
@@ -54,16 +60,16 @@ function ProfileSidebar() {
   return (
 
     <aside
-      className="
-      bg-white
-      rounded-2xl
-      border
-      border-gray-200
-      p-6
-      h-fit
-      sticky
-      top-24
-      "
+className="
+bg-white
+rounded-2xl
+border
+border-gray-200
+p-6
+h-fit
+lg:sticky
+lg:top-24
+"
     >
 
       {/* User */}
@@ -79,30 +85,55 @@ function ProfileSidebar() {
         "
       >
 
-        <div
-          className="
-          w-14
-          h-14
-          rounded-full
-          bg-black
-          text-white
-          flex
-          items-center
-          justify-center
-          text-xl
-          font-bold
-          "
-        >
+ {
 
-          {
+user?.avatar ? (
 
-            user?.fullname
-              ?.charAt(0)
-              ?.toUpperCase() || "U"
+  <img
 
-          }
+    src={user.avatar}
 
-        </div>
+    alt={user.fullname}
+
+    className="
+    w-14
+    h-14
+    rounded-full
+    object-cover
+    "
+
+  />
+
+) : (
+
+  <div
+    className="
+    w-14
+    h-14
+    rounded-full
+    bg-black
+    text-white
+    flex
+    items-center
+    justify-center
+    text-xl
+    font-bold
+    "
+  >
+
+    {
+
+      user?.fullname
+        ?.charAt(0)
+        ?.toUpperCase() || "U"
+
+    }
+
+  </div>
+
+)
+
+}
 
         <div>
 

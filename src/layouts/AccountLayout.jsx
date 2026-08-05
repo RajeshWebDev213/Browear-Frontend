@@ -29,6 +29,7 @@ function AccountLayout() {
           className="
           mt-8
           grid
+          grid-cols-1
           lg:grid-cols-[260px_1fr]
           gap-8
           "
