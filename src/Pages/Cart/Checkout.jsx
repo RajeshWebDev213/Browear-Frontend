@@ -68,7 +68,7 @@ function Checkout() {
       }
 
       const res = await fetch(
-        "http://localhost:3000/api/auth/orders",
+        "http://localhost:5000/api/auth/orders",
         {
           method: "POST",
           headers: {

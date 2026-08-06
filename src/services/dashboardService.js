@@ -15,7 +15,7 @@ export const getDashboardOverview = async () => {
 // Monthly Sales
 export const getMonthlySales = async () => {
   const res = await api.get("/dashboard/monthly-sales");
-  return res.data;
+  return res.data.monthlySales;
 };
 
 // Revenue
@@ -39,7 +39,7 @@ export const getRecentOrders = async () => {
 // Recent Users
 export const getRecentUsers = async () => {
   const res = await api.get("/dashboard/recent-users");
-  return res.data;
+  return res.data.users;
 };
 
 // Order Status

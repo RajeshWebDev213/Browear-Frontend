@@ -79,12 +79,16 @@ if (!validatePassword(password)) {
       );
 
       const data = response.data;
+//               console.log(data.user);
+// console.log(data.user.role);
+//       console.log("Login Response:", data);
+// console.log("Role:", data.user.role);
 
       localStorage.setItem(
         "token",
         data.token
       );
-
+console.log("Token after login:", localStorage.getItem("token"));
       localStorage.setItem(
         "user",
         JSON.stringify(data.user)
@@ -99,8 +103,9 @@ if (!validatePassword(password)) {
       } else if (
         data.user.role === "admin"
       ) {
-
-        navigate("/adminpanel");
+        console.log("Going to the admin panel")
+        
+  navigate("/admin");
 
       } else {
 

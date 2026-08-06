@@ -3,15 +3,23 @@ import { useAuth } from "../hooks/useAuth";
 
 const PublicRoute = ({ children }) => {
 
-  const { isAuthenticated, loading } = useAuth();
+  const {
+    user,
+    loading,
+    isAuthenticated,
+  } = useAuth();
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  return isAuthenticated
-    ? <Navigate to="/" replace />
-    : children;
+  if (!isAuthenticated) {
+    return children;
+  }
+
+  return user?.role === "admin"
+    ? <Navigate to="/admin" replace />
+    : <Navigate to="/" replace />;
 
 };
 

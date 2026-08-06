@@ -190,54 +190,38 @@ const [relatedProducts, setRelatedProducts] = useState([]);
 
           <div className="flex gap-4 mt-5 flex-wrap">
 
-            {(product.images || []).map(
+           {(product.images || []).map((image, index) => (
 
-              (image, index) => (
+  <button
+    key={index}
+    onClick={() => setSelectedImage(image.url)}
+    className={`
+      w-24
+      h-24
+      rounded-2xl
+      overflow-hidden
+      border-2
+      ${
+        selectedImage === image.url
+          ? "border-black"
+          : "border-gray-200"
+      }
+    `}
+  >
 
-                <button
+    <img
+      src={image.url}
+      alt="thumbnail"
+      className="
+        w-full
+        h-full
+        object-cover
+      "
+    />
 
-                  key={index}
+  </button>
 
-                  onClick={() =>
-                    setSelectedImage(image.url)
-                  }
-
-                  className={`
-                  w-24
-                  h-24
-                  rounded-2xl
-                  overflow-hidden
-                  border-2
-    
-            
-
-              ${item.images?.[0]?.url 
-
-                  ? "border-black"
-                      : "border-gray-200"
-              }
-                  `}
-                >
-
-                  <img
-
-                    src={image.url}
-
-                    alt="thumbnail"
-
-                    className="
-                    w-full
-                    h-full
-                    object-cover
-                    "
-
-                  />
-
-                </button>
-
-              )
-
-            )}
+))}
 
           </div>
 

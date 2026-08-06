@@ -15,23 +15,22 @@ REQUEST INTERCEPTOR
 =========================================
 */
 
-api.interceptors.request.use(
+api.interceptors.request.use((config) => {
 
-  (config) => {
+  const token = localStorage.getItem("token");
 
-    const token = localStorage.getItem("token");
+  console.log("Request URL:", config.url);
+  console.log("Token:", token);
+  console.log("Authorization Before:", config.headers.Authorization);
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-    return config;
+  console.log("Authorization After:", config.headers.Authorization);
 
-  },
-
-  (error) => Promise.reject(error)
-
-);
+  return config;
+});
 
 /*
 =========================================
@@ -44,28 +43,7 @@ api.interceptors.response.use(
   (response) => response,
 
   (error) => {
-
-    if (error.response?.status === 401) {
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("otpAccess");
-      localStorage.removeItem("personalAccess");
-
-      toast.error("Session expired. Please login again.");
-
-      if (
-        window.location.pathname !== "/login"
-      ) {
-
-        window.location.href = "/login";
-
-      }
-
-    }
-
     return Promise.reject(error);
-
   }
 
 );

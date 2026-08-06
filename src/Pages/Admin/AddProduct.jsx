@@ -35,6 +35,8 @@ function AddProduct() {
 
       category: "",
 
+      brand: "",
+
       price: "",
 
       stock: "",
@@ -92,6 +94,9 @@ function AddProduct() {
         "Category is required"
       );
     }
+    if(!formData.brand){
+      return showError("Brand is required")
+    }
 
     if (!formData.price) {
       return showError(
@@ -131,6 +136,7 @@ function AddProduct() {
         "category",
         formData.category
       );
+      data.append("brand",formData.brand);
 
       data.append(
         "price",
@@ -289,6 +295,14 @@ function AddProduct() {
             </option>
 
           </select>
+          <input
+  type="text"
+  name="brand"
+  placeholder="Brand"
+  value={formData.brand}
+  onChange={handleChange}
+  className="w-full border rounded-xl p-4"
+/>
 
           <div className="grid grid-cols-2 gap-6">
 

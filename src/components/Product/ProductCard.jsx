@@ -182,7 +182,7 @@ function ProductCard({
           <button
             onClick={() =>
               addToCart &&
-              addToCart(product)
+              addToCart(_id || id)
             }
             className="
             h-11
@@ -204,7 +204,7 @@ function ProductCard({
           </button>
 
           <Link
-            to={`/product/${_id || id}`}
+            to={`/products/${_id || id}`}
             className="
             h-11
             rounded-xl

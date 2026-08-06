@@ -25,60 +25,46 @@ export const AuthProvider = ({
   ================================
   */
 
-  const refreshProfile = async () => {
+const refreshProfile = async () => {
 
-    const token =
-      localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token");
 
-    if (!token || token === "undefined") {
+  if (!token) {
 
-      localStorage.removeItem("token");
+    setLoading(false);
 
-      localStorage.removeItem("user");
+    return;
 
-      setUser(null);
+  }
 
-      setLoading(false);
+  try {
 
-      return;
+    const data =
+      await getAccount();
 
-    }
+    setUser(data);
 
-    try {
+    localStorage.setItem(
+      "user",
+      JSON.stringify(data)
+    );
 
-      setLoading(true);
+  } catch (err) {
 
-      const data =
-        await getAccount();
+    if (err.response?.status === 401) {
 
-      setUser(data);
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data)
-      );
+      logout();
 
     }
 
-    catch (err) {
+  } finally {
 
-      console.error(err);
+    setLoading(false);
 
-      localStorage.removeItem("token");
+  }
 
-      localStorage.removeItem("user");
-
-      setUser(null);
-
-    }
-
-    finally {
-
-      setLoading(false);
-
-    }
-
-  };
+};
 
   useEffect(() => {
 
@@ -92,16 +78,18 @@ export const AuthProvider = ({
   ================================
   */
 
-  const login = (userData) => {
+const login = (userData) => {
 
-    setUser(userData);
+  setUser(userData);
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(userData)
-    );
+  localStorage.setItem(
+    "user",
+    JSON.stringify(userData)
+  );
 
-  };
+  
+
+};
 
   /*
   ================================

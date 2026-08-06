@@ -43,6 +43,9 @@ const [recentUsers, setRecentUsers] =
 
 const [loading, setLoading] =
   useState(true);
+  useEffect(() => {
+  console.log("Admin Dashboard Loaded");
+}, []);
 useEffect(() => {
 
   const fetchDashboard = async () => {
@@ -90,7 +93,7 @@ useEffect(() => {
       setOrderStatus(statusData);
 
       setRecentOrders(ordersData);
-
+console.log("Recent Users API:", usersData);
       setRecentUsers(usersData);
 
     } catch (error) {

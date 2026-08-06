@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import AdminLayout from "./layouts/AdminLayout";
+import AccountLayout from "./layouts/AccountLayout";
 
 /* ==========================================
    Route Guards
@@ -17,6 +18,17 @@ import PublicRoute from "./routes/PublicRoute";
 import OTPRoute from "./routes/OTPRoute";
 import PersonalRoute from "./routes/PersonalRoute";
 import AdminRoute from "./routes/AdminRoute";
+
+/* ==========================================
+   Authentication Pages
+========================================== */
+
+import Login from "./Pages/Auth/Login";
+import Signup from "./Pages/Auth/Signup";
+import OTP from "./Pages/Auth/OTP";
+import Personal from "./Pages/Auth/Personal";
+import ForgotPassword from "./Pages/Auth/ForgotPassword";
+import ResetPassword from "./Pages/Auth/ResetPassword";
 
 /* ==========================================
    Customer Pages
@@ -37,27 +49,27 @@ import Checkout from "./Pages/Cart/Checkout";
 import Wishlist from "./Pages/Wishlist/Wishlist";
 
 /* ==========================================
-   Authentication Pages
+   Profile Pages
 ========================================== */
 
-import Login from "./Pages/Auth/Login";
-import Signup from "./Pages/Auth/Signup";
-import OTP from "./Pages/Auth/OTP";
-import Personal from "./Pages/Auth/Personal";
-import ForgotPassword from "./Pages/Auth/ForgotPassword";
-import ResetPassword from "./Pages/Auth/ResetPassword";
+import Account from "./Pages/Profile/Account";
+import EditProfile from "./Pages/Profile/EditProfile";
+import MyOrders from "./Pages/Profile/MyOrders";
+import ProfileOrderDetails from "./Pages/Profile/OrderDetails";
+import ChangePassword from "./Pages/Profile/ChangePassword";
 
 /* ==========================================
    Admin Pages
 ========================================== */
 
 import Dashboard from "./Pages/Admin/Dashboard";
+
 import AdminProducts from "./Pages/Admin/Products";
 import AddProduct from "./Pages/Admin/AddProduct";
 import EditProduct from "./Pages/Admin/EditProduct";
 
 import Orders from "./Pages/Admin/Orders";
-import OrderDetails from "./Pages/Admin/OrderDetails";
+import AdminOrderDetails from "./Pages/Admin/OrderDetails";
 
 import Users from "./Pages/Admin/Users";
 import UserDetails from "./Pages/Admin/UserDetails";
@@ -72,260 +84,189 @@ import Settings from "./Pages/Admin/Settings";
 ========================================== */
 
 import NotFound from "./Pages/NotFound";
-
-import AccountLayout from "./layouts/AccountLayout";
-
-import Account from "./Pages/Profile/Account";
-import EditProfile from "./Pages/Profile/EditProfile";
-import MyOrders from "./Pages/Profile/MyOrders";
-import OrderDetails from "./Pages/Profile/OrderDetails";
-import ChangePassword from "./Pages/Profile/ChangePassword";
 function App() {
 
   return (
 
     <Routes>
-      <Route
-  path="edit"
-  element={<EditProfile />}
-/>
-            {/* ==========================================
+
+      {/* ==========================================
           Authentication Routes
       ========================================== */}
 
       <Route element={<AuthLayout />}>
 
         <Route
-
           path="/login"
-
           element={
-
             <PublicRoute>
-
               <Login />
-
             </PublicRoute>
-
           }
-
         />
 
         <Route
-
           path="/signup"
-
           element={
-
             <PublicRoute>
-
               <Signup />
-
             </PublicRoute>
-
           }
-
         />
 
         <Route
-
           path="/otp"
-
           element={
-
             <OTPRoute>
-
               <OTP />
-
             </OTPRoute>
-
           }
-
         />
 
         <Route
-
           path="/personal"
-
           element={
-
             <PersonalRoute>
-
               <Personal />
-
             </PersonalRoute>
-
           }
-
         />
 
         <Route
-
           path="/forgot-password"
-
           element={
-
             <PublicRoute>
-
               <ForgotPassword />
-
             </PublicRoute>
-
           }
-
         />
 
         <Route
-
           path="/reset-password"
-
           element={
-
             <PublicRoute>
-
               <ResetPassword />
-
             </PublicRoute>
-
           }
-
         />
 
       </Route>
-            {/* ==========================================
+
+      {/* ==========================================
           Customer Routes
       ========================================== */}
 
       <Route element={<MainLayout />}>
 
-        <Route
+        {/* Home */}
 
+        <Route
           path="/"
-
           element={<Home />}
-
         />
 
-        <Route
+        {/* Products */}
 
+        <Route
           path="/products"
-
           element={<ProductsPage />}
-
         />
 
         <Route
-
           path="/products/:id"
-
           element={<ProductDetails />}
-
         />
 
         <Route
-
           path="/topwear"
-
           element={<Topwear />}
-
         />
 
         <Route
-
           path="/bottomwear"
-
           element={<Bottomwear />}
-
         />
 
         <Route
-
           path="/footwear"
-
           element={<Footwear />}
-
         />
 
-        <Route
+        {/* Protected Customer Routes */}
 
+        <Route
           path="/cart"
-
           element={
-
             <ProtectedRoute>
-
               <Cart />
-
             </ProtectedRoute>
-
           }
-
         />
 
         <Route
-
           path="/checkout"
-
           element={
-
             <ProtectedRoute>
-
               <Checkout />
-
             </ProtectedRoute>
-
           }
-
         />
 
         <Route
-
           path="/wishlist"
-
           element={
-
             <ProtectedRoute>
-
               <Wishlist />
-
             </ProtectedRoute>
-
           }
-
         />
+
+        {/* ==========================================
+            Account Routes
+        ========================================== */}
+
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute>
+              <AccountLayout />
+            </ProtectedRoute>
+          }
+        >
+
+          <Route
+            index
+            element={<Account />}
+          />
+
+          <Route
+            path="edit"
+            element={<EditProfile />}
+          />
+
+          <Route
+            path="orders"
+            element={<MyOrders />}
+          />
+
+          <Route
+            path="orders/:id"
+            element={<ProfileOrderDetails />}
+          />
+
+          <Route
+            path="change-password"
+            element={<ChangePassword />}
+          />
+
+        </Route>
 
       </Route>
-            {/* ==========================================
+
+      {/* ==========================================
           Admin Routes
       ========================================== */}
-<Route
-  path="/account"
-  element={
-    <ProtectedRoute>
-      <AccountLayout />
-    </ProtectedRoute>
-  }
->
 
-  <Route
-    index
-    element={<Account />}
-  />
-
-  <Route
-    path="orders"
-    element={<MyOrders/>}
-  />
-  <Route
-  path="orders/:id"
-  element={<OrderDetails />}
-/>
-  <Route
-    path="change-password"
-    element={<ChangePassword/>}
-  />
-
-</Route>
       <Route
         path="/admin"
         element={
@@ -368,7 +309,7 @@ function App() {
 
         <Route
           path="orders/:id"
-          element={<OrderDetails />}
+          element={<AdminOrderDetails />}
         />
 
         {/* Users */}
@@ -405,7 +346,7 @@ function App() {
       </Route>
 
       {/* ==========================================
-          404
+          404 Page
       ========================================== */}
 
       <Route
@@ -420,4 +361,3 @@ function App() {
 }
 
 export default App;
-  
