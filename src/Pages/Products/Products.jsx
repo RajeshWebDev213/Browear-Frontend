@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 
 import ProductGrid from "../../components/Product/ProductGrid";
 import ProductFilter from "../../components/Product/ProductFilter";
-
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 import { getAllProducts } from "../../services/productService";
-
+import { WishlistContext } from "../../context/WishlistContext";
 function Products() {
   const [products, setProducts] = useState([]);
 
@@ -19,6 +20,12 @@ function Products() {
   const [minPrice, setMinPrice] = useState("");
 
   const [maxPrice, setMaxPrice] = useState("");
+  const {addToCart} = useContext(CartContext);
+  const wishlistContext = useContext(WishlistContext);
+const cart = useContext(CartContext);
+
+console.log("Cart Context:", cart);
+  const {wishlist,toggleWishlist} = useContext(WishlistContext);
 
   useEffect(() => {
     fetchProducts();
@@ -148,6 +155,9 @@ function Products() {
       <ProductGrid
         products={filteredProducts}
         loading={loading}
+        addToCart={addToCart}
+        toggleWishlist={toggleWishlist}
+        wishlist={wishlist}
       />
 
     </section>

@@ -10,33 +10,27 @@ const api = axios.create({
 });
 
 /*
-=========================================
+
 REQUEST INTERCEPTOR
-=========================================
+
 */
 
 api.interceptors.request.use((config) => {
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
-  console.log("Request URL:", config.url);
-  console.log("Token:", token);
-  console.log("Authorization Before:", config.headers.Authorization);
+
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  console.log("Authorization After:", config.headers.Authorization);
 
   return config;
 });
 
-/*
-=========================================
-RESPONSE INTERCEPTOR
-=========================================
-*/
+//RESPONSE INTERCEPTOR
+
 
 api.interceptors.response.use(
 

@@ -33,7 +33,7 @@ function DeleteProductModal({
         w-full
         max-w-md
         bg-white
-        rounded-2xl
+        rounded-xl
         p-8
         shadow-xl
         "

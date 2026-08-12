@@ -32,7 +32,7 @@ export const OrdersProvider = ({
   const refreshOrders = async () => {
 
     const token =
-      localStorage.getItem("token");
+      sessionStorage.getItem("token");
 
     if (!token) {
 

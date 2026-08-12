@@ -3,7 +3,7 @@ function ProductSkeleton() {
     <div
       className="
       bg-white
-      rounded-3xl
+      rounded-xl
       border
       border-gray-100
       overflow-hidden

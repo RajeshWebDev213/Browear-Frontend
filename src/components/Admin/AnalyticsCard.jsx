@@ -15,7 +15,7 @@ function AnalyticsCard({
     <div
       className="
       bg-white
-      rounded-2xl
+      rounded-xl
       border
       p-6
       shadow-sm

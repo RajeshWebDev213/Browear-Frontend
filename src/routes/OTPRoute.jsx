@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 const OTPRoute = ({ children }) => {
-  const otpAccess = localStorage.getItem("otpAccess");
+  const otpAccess = sessionStorage.getItem("otpAccess");
 
   return otpAccess
     ? children

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
 
 import {
@@ -9,337 +8,153 @@ import {
   Calendar,
   VenusAndMars,
   Pencil,
+  BadgeCheck,
 } from "lucide-react";
 
-import {
-  getProfile,
-} from "../../services/profileService";
+import { getProfile } from "../../services/profileService";
 
 import Loader from "../../components/common/Loader";
 
 function Account() {
-
-  const [profile, setProfile] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(true);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     fetchProfile();
-
   }, []);
 
   const fetchProfile = async () => {
-
     try {
-
-      const data =
-        await getProfile();
-
-      setProfile(
-        data.user || data
-      );
-
+      const data = await getProfile();
+      setProfile(data.user || data);
     } catch (error) {
-
       console.log(error);
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
   if (loading) {
-
     return <Loader />;
-
   }
 
   return (
-
-    <div
-      className="
-      bg-white
-      rounded-2xl
-      border
-      border-gray-200
-      p-8
-      shadow-sm
-      "
-    >
-
+    <div className="border border-gray-200 bg-white">
       {/* Header */}
-
-      <div
-        className="
-        flex
-        items-center
-        justify-between
-        mb-8
-        "
-      >
-
-        <h2 className="text-2xl font-bold">
-
-          My Profile
-
-        </h2>
+      <div className="flex items-center justify-between border-b border-gray-200 px-8 py-6">
+        <div>
+          <span className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-400">
+            Account
+          </span>
+          <h2 className="mt-1 text-2xl font-bold tracking-tight text-gray-900">
+            My Profile
+          </h2>
+        </div>
 
         <Link
-
           to="/account/edit"
-
-          className="
-          flex
-          items-center
-          gap-2
-          bg-black
-          text-white
-          px-5
-          py-3
-          rounded-xl
-          hover:bg-zinc-900
-          transition
-          "
-
+          className="flex items-center gap-2 bg-black px-5 py-2.5 text-sm font-medium tracking-wide text-white transition-colors duration-300 hover:bg-zinc-800"
         >
-
-          <Pencil size={18} />
-
+          <Pencil size={15} />
           Edit Profile
-
         </Link>
-
       </div>
 
-      {/* Avatar */}
-
-      <div
-        className="
-        flex
-        flex-col
-        items-center
-        mb-10
-        "
-      >
-
-        {
-
-          profile?.avatar ? (
-
+      {/* Profile Header */}
+      <div className="flex flex-col items-center px-6 py-12">
+        <div className="relative">
+          {profile?.avatar?.url ? (
             <img
-
-              src={profile.avatar}
-
+              src={profile.avatar.url}
               alt={profile.fullname}
-
-              className="
-              w-28
-              h-28
-              rounded-full
-              object-cover
-              border-4
-              border-gray-200
-              "
-
+              className="h-32 w-32 rounded-full border-4 border-white object-cover shadow-sm"
             />
-
           ) : (
-
-            <div
-              className="
-              w-28
-              h-28
-              rounded-full
-              bg-black
-              text-white
-              text-4xl
-              font-bold
-              flex
-              items-center
-              justify-center
-              "
-            >
-
-              {
-
-                profile?.fullname
-                  ?.charAt(0)
-                  ?.toUpperCase() || "U"
-
-              }
-
+            <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-white bg-gray-100 shadow-sm">
+              <User size={56} className="text-gray-400" />
             </div>
+          )}
 
-          )
+          <Link
+            to="/account/edit"
+            className="absolute bottom-0 right-0 flex h-10 w-10 items-center justify-center border-2 border-white bg-black text-white transition-transform hover:scale-105"
+          >
+            <Pencil size={15} />
+          </Link>
+        </div>
 
-        }
-
-        <h3 className="mt-5 text-2xl font-semibold">
-
+        <h3 className="mt-6 text-2xl font-bold tracking-tight text-gray-900">
           {profile?.fullname}
-
         </h3>
+        <p className="mt-1 text-sm text-gray-500">{profile?.email}</p>
 
-        <p className="text-gray-500">
-
-          {profile?.email}
-
-        </p>
-
+        <div className="mt-4 flex items-center gap-2 bg-green-50 px-4 py-1.5 text-xs font-medium text-green-700">
+          <BadgeCheck size={15} />
+          Verified Account
+        </div>
       </div>
 
       {/* Personal Information */}
-
-      <div
-        className="
-        grid
-        md:grid-cols-2
-        gap-6
-        "
-      >
-
+      <div className="grid gap-4 px-8 pb-10 md:grid-cols-2">
         <InfoCard
-
-          icon={<User size={20} />}
-
+          icon={<User size={18} />}
           label="Full Name"
-
-          value={profile?.fullname}
-
+          value={profile?.fullname || "Not Added"}
         />
 
         <InfoCard
-
-          icon={<Mail size={20} />}
-
-          label="Email"
-
-          value={profile?.email}
-
+          icon={<Mail size={18} />}
+          label="Email Address"
+          value={profile?.email || "Not Added"}
         />
 
         <InfoCard
-
-          icon={<Phone size={20} />}
-
-          label="Phone"
-
-          value={
-            profile?.phonenumber ||
-            "Not Added"
-          }
-
+          icon={<Phone size={18} />}
+          label="Phone Number"
+          value={profile?.phone || "Not Added"}
         />
 
         <InfoCard
-
-          icon={
-            <VenusAndMars size={20} />
-          }
-
+          icon={<VenusAndMars size={18} />}
           label="Gender"
-
-          value={
-            profile?.gender ||
-            "Not Added"
-          }
-
+          value={profile?.gender || "Not Added"}
         />
 
         <InfoCard
-
-          icon={<Calendar size={20} />}
-
+          icon={<Calendar size={18} />}
           label="Date of Birth"
-
           value={
-            profile?.dob
-              ? new Date(
-                  profile.dob
-                ).toLocaleDateString()
+            profile?.dateOfBirth
+              ? new Date(profile.dateOfBirth).toLocaleDateString("en-IN", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })
               : "Not Added"
           }
-
         />
-
       </div>
-
     </div>
-
   );
-
 }
 
-function InfoCard({
-
-  icon,
-
-  label,
-
-  value,
-
-}) {
-
+function InfoCard({ icon, label, value }) {
   return (
-
-    <div
-      className="
-      border
-      rounded-2xl
-      p-5
-      flex
-      items-center
-      gap-4
-      "
-    >
-
-      <div
-        className="
-        w-12
-        h-12
-        rounded-full
-        bg-gray-100
-        flex
-        items-center
-        justify-center
-        "
-      >
-
+    <div className="flex items-center gap-4 border border-gray-200 p-5 transition-colors hover:border-black">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center bg-gray-50 text-gray-700">
         {icon}
-
       </div>
 
-      <div>
-
-        <p
-          className="
-          text-sm
-          text-gray-500
-          "
-        >
-
+      <div className="min-w-0 flex-1">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
           {label}
-
         </p>
-
-        <p className="font-semibold">
-
+        <p className="mt-1 truncate text-sm font-medium text-gray-900">
           {value}
-
         </p>
-
       </div>
-
     </div>
-
   );
-
 }
 
 export default Account;

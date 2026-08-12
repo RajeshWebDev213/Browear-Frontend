@@ -41,7 +41,7 @@ export const CartContextProvider = ({
   const refreshCart = async () => {
 
     const token =
-      localStorage.getItem("token");
+      sessionStorage.getItem("token");
 
     if (!token) {
 
@@ -108,19 +108,21 @@ export const CartContextProvider = ({
   =========================================
   */
 
-  const addToCart = async (
+ const addToCart = async (
+  productId,
+  quantity = 1,
+  size
+) => {
+
+  await addCartService(
     productId,
-    quantity = 1
-  ) => {
+    quantity,
+    size
+  );
 
-    await addCartService(
-      productId,
-      quantity
-    );
+  refreshCart();
 
-    refreshCart();
-
-  };
+};
 
   /*
   =========================================
@@ -128,19 +130,21 @@ export const CartContextProvider = ({
   =========================================
   */
 
-  const updateQuantity = async (
+ const updateQuantity = async (
+  productId,
+  quantity,
+  size
+) => {
+
+  await updateCartQuantity(
     productId,
-    quantity
-  ) => {
+    quantity,
+    size
+  );
 
-    await updateCartQuantity(
-      productId,
-      quantity
-    );
+  refreshCart();
 
-    refreshCart();
-
-  };
+};
 
   /*
   =========================================
@@ -148,17 +152,19 @@ export const CartContextProvider = ({
   =========================================
   */
 
-  const removeFromCart = async (
-    productId
-  ) => {
+ const removeFromCart = async (
+  productId,
+  size
+) => {
 
-    await removeCartService(
-      productId
-    );
+  await removeCartService(
+    productId,
+    size
+  );
 
-    refreshCart();
+  refreshCart();
 
-  };
+};
 
   /*
   =========================================

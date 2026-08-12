@@ -8,70 +8,64 @@ import {
 
 function OrderStatusCard({ status }) {
 
-  const items = [
+const items = [
 
-    {
-      title: "Pending",
-      value: status?.pending || 0,
-      icon: Clock3,
-      bg: "bg-yellow-100",
-      color: "text-yellow-600",
-    },
+  {
+    title: "Pending",
+    value: status?.Pending || 0,
+    icon: Clock3,
+  },
 
-    {
-      title: "Processing",
-      value: status?.processing || 0,
-      icon: Package,
-      bg: "bg-blue-100",
-      color: "text-blue-600",
-    },
+  {
+    title: "Confirmed",
+    value: status?.Confirmed || 0,
+    icon: Package,
+  },
 
-    {
-      title: "Shipped",
-      value: status?.shipped || 0,
-      icon: Truck,
-      bg: "bg-indigo-100",
-      color: "text-indigo-600",
-    },
+  {
+    title: "Shipped",
+    value: status?.Shipped || 0,
+    icon: Truck,
+  },
 
-    {
-      title: "Delivered",
-      value: status?.delivered || 0,
-      icon: CheckCircle,
-      bg: "bg-green-100",
-      color: "text-green-600",
-    },
+  {
+    title: "Out for Delivery",
+    value: status?.["Out for Delivery"] || 0,
+    icon: Truck,
+  },
 
-    {
-      title: "Cancelled",
-      value: status?.cancelled || 0,
-      icon: XCircle,
-      bg: "bg-red-100",
-      color: "text-red-600",
-    },
+  {
+    title: "Delivered",
+    value: status?.Delivered || 0,
+    icon: CheckCircle,
+  },
 
-  ];
+  {
+    title: "Cancelled",
+    value: status?.Cancelled || 0,
+    icon: XCircle,
+  },
+
+];
 
   return (
 
     <div
       className="
       bg-white
-      rounded-2xl
       border
       border-gray-200
-      shadow-sm
       p-6
       "
     >
 
-      <h2 className="text-xl font-semibold mb-6">
+      <h2 className="text-xs uppercase tracking-widest font-medium text-black mb-6">
 
         Order Status
 
       </h2>
 
-      <div className="space-y-4">
+      <div className="divide-y divide-gray-100">
 
         {
 
@@ -87,6 +81,7 @@ function OrderStatusCard({ status }) {
                 flex
                 justify-between
                 items-center
+                py-3.5
                 "
               >
 
@@ -94,30 +89,30 @@ function OrderStatusCard({ status }) {
                   className="
                   flex
                   items-center
-                  gap-4
+                  gap-3
                   "
                 >
 
                   <div
-                    className={`
-                    w-12
-                    h-12
-                    rounded-xl
+                    className="
+                    w-10
+                    h-10
+                    border
+                    border-gray-200
                     flex
                     items-center
                     justify-center
-                    ${item.bg}
-                    `}
+                    "
                   >
 
                     <Icon
-                      size={22}
-                      className={item.color}
+                      size={17}
+                      className="text-black"
                     />
 
                   </div>
 
-                  <span className="font-medium">
+                  <span className="text-sm text-gray-700">
 
                     {item.title}
 
@@ -127,8 +122,9 @@ function OrderStatusCard({ status }) {
 
                 <span
                   className="
-                  text-xl
-                  font-bold
+                  text-lg
+                  font-semibold
+                  text-black
                   "
                 >
 

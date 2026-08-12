@@ -18,7 +18,7 @@ function DeleteUserModal({
 
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-      <div className="w-full max-w-md bg-white rounded-2xl p-8">
+      <div className="w-full max-w-md bg-white rounded-xl p-8">
 
         <div className="flex justify-center">
 

@@ -6,7 +6,7 @@ function ProductSkeleton() {
       className="
       animate-pulse
       bg-white
-      rounded-2xl
+      rounded-xl
       p-5
       border
       "

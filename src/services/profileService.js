@@ -1,10 +1,6 @@
 import api from "./api";
 
-/*
-=========================================
-GET MY PROFILE
-=========================================
-*/
+
 
 export const getProfile = async () => {
 
@@ -14,11 +10,7 @@ export const getProfile = async () => {
 
 };
 
-/*
-=========================================
-UPDATE PROFILE
-=========================================
-*/
+
 
 export const updateProfile = async (data) => {
 
@@ -31,11 +23,7 @@ export const updateProfile = async (data) => {
 
 };
 
-/*
-=========================================
-UPLOAD PROFILE PICTURE
-=========================================
-*/
+
 
 export const uploadProfilePicture = async (
   formData
@@ -56,11 +44,7 @@ export const uploadProfilePicture = async (
 
 };
 
-/*
-=========================================
-CHANGE PASSWORD
-=========================================
-*/
+
 
 export const changePassword = async (
   passwordData
@@ -75,11 +59,6 @@ export const changePassword = async (
 
 };
 
-/*
-=========================================
-DELETE ACCOUNT
-=========================================
-*/
 
 export const deleteAccount = async () => {
 
@@ -91,11 +70,7 @@ export const deleteAccount = async () => {
 
 };
 
-/*
-=========================================
-ADMIN - GET ALL USERS
-=========================================
-*/
+
 
 export const getAllUsers = async () => {
 
@@ -107,11 +82,6 @@ export const getAllUsers = async () => {
 
 };
 
-/*
-=========================================
-ADMIN - GET SINGLE USER
-=========================================
-*/
 
 export const getSingleUser = async (
   userId
@@ -125,11 +95,7 @@ export const getSingleUser = async (
 
 };
 
-/*
-=========================================
-ADMIN - UPDATE USER ROLE
-=========================================
-*/
+
 
 export const updateUserRole = async (
   userId,
@@ -147,11 +113,7 @@ export const updateUserRole = async (
 
 };
 
-/*
-=========================================
-ADMIN - DELETE USER
-=========================================
-*/
+
 
 export const adminDeleteUser = async (
   userId
@@ -165,11 +127,7 @@ export const adminDeleteUser = async (
 
 };
 
-/*
-=========================================
-ADMIN - USER STATISTICS
-=========================================
-*/
+
 
 export const getUserStatistics = async () => {
 

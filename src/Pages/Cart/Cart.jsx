@@ -7,186 +7,93 @@ import OrderSummary from "../../components/Cart/OrderSummary";
 
 import emptyCart from "../../assets/images/cart.png";
 import { useContext } from "react";
+
 function Cart() {
-
-  const {
-
-    cartItems,
-
-    removeFromCart,
-
-    updateQuantity,
-
-  } = useContext(CartContext);
+  const { cartItems, removeFromCart, updateQuantity } =
+    useContext(CartContext);
 
   const subtotal = cartItems.reduce(
-
     (sum, item) =>
-
-      sum +
-
-      Number(item.price || 0) *
-
-      (item.quantity || 1),
-
+      sum + Number(item.product?.price || 0) * (item.quantity || 1),
     0
-
   );
 
   const totalDiscount = cartItems.reduce(
-
     (sum, item) =>
-
       sum +
-
-      (
-
-        Number(item.price || 0) *
-
+      (Number(item.product?.price || 0) *
         (item.quantity || 1) *
-
-        (item.discount || 0)
-
-      ) /
-
-      100,
-
+        Number(item.product?.discount || 0)) /
+        100,
     0
-
   );
 
-  const finalAmount =
-
-    subtotal - totalDiscount;
+  const finalAmount = subtotal - totalDiscount;
 
   if (cartItems.length === 0) {
-
     return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6">
+        <img src={emptyCart} alt="Empty Cart" className="w-44" />
 
-      <div
-        className="
-        min-h-screen
-        flex
-        flex-col
-        items-center
-        justify-center
-        bg-gray-50
-        px-6
-        "
-      >
-
-        <img
-
-          src={emptyCart}
-
-          alt="Empty Cart"
-
-          className="w-52"
-
-        />
-
-        <h2 className="text-3xl font-bold mt-8">
-
-          Your Cart is Empty
-
+        <span className="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+          Cart
+        </span>
+        <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
+          Your cart is empty
         </h2>
-
-        <p className="text-gray-500 mt-3">
-
+        <p className="mt-3 text-sm text-gray-500">
           Looks like you haven't added anything yet.
-
         </p>
 
         <Link to="/">
-
-          <button
-            className="
-            mt-8
-            px-8
-            py-4
-            rounded-2xl
-            bg-black
-            text-white
-            hover:bg-zinc-900
-            transition
-            "
-          >
-
+          <button className="mt-8 bg-black px-8 py-3 text-sm font-medium tracking-wide text-white transition-colors duration-300 hover:bg-zinc-800">
             Continue Shopping
-
           </button>
-
         </Link>
-
       </div>
-
     );
-
   }
 
   return (
+    <section className="min-h-screen bg-white py-12">
+      <div className="mx-auto max-w-7xl px-5">
+        <div className="mb-10 flex items-end justify-between border-b border-gray-200 pb-6">
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+              Review Order
+            </span>
+            <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900">
+              Shopping Cart
+            </h1>
+          </div>
+          <p className="text-sm text-gray-500">
+            {cartItems.length} {cartItems.length === 1 ? "item" : "items"}
+          </p>
+        </div>
 
-    <section className="bg-gray-50 min-h-screen py-12">
-
-      <div className="max-w-7xl mx-auto px-5">
-
-        <h1 className="text-4xl font-bold mb-10">
-
-          Shopping Cart
-
-        </h1>
-
-        <div
-          className="
-          grid
-          grid-cols-1
-          lg:grid-cols-3
-          gap-8
-          "
-        >
-
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
           {/* Cart Items */}
-
-          <div className="lg:col-span-2 space-y-6">
-
+          <div className="divide-y divide-gray-100 lg:col-span-2">
             {cartItems.map((item) => (
-
               <CartCard
-
-                key={item.id}
-
+                key={item._id || item.product?._id}
                 item={item}
-
                 removeFromCart={removeFromCart}
-
                 updateQuantity={updateQuantity}
-
               />
-
             ))}
-
           </div>
 
           {/* Summary */}
-
           <OrderSummary
-
             subtotal={subtotal}
-
             totalDiscount={totalDiscount}
-
             finalAmount={finalAmount}
-
           />
-
         </div>
-
       </div>
-
     </section>
-
   );
-
 }
 
 export default Cart;

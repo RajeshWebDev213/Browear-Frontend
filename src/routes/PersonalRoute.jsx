@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 
 const PersonalRoute = ({ children }) => {
-  const personalAccess = localStorage.getItem("personalAccess");
+  const personalAccess = sessionStorage.getItem("personalAccess");
 
   return personalAccess
     ? children

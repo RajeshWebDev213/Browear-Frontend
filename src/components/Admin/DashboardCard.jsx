@@ -1,103 +1,20 @@
-import { TrendingUp } from "lucide-react";
-
-function DashboardCard({
-
-  title,
-
-  value,
-
-  icon: Icon,
-
-  color,
-
-  iconColor,
-
-}) {
-
+function DashboardCard({ title, value, icon: Icon, color, iconColor }) {
   return (
-
-    <div
-      className="
-      bg-white
-      rounded-2xl
-      border
-      border-gray-200
-      shadow-sm
-      p-6
-      flex
-      justify-between
-      items-center
-      hover:shadow-md
-      transition
-      "
-    >
-
+    <div className="flex items-center justify-between border border-gray-200 p-6 transition-colors hover:border-gray-300">
       <div>
-
-        <p className="text-gray-500">
-
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
           {title}
-
         </p>
-
-        <h2
-          className="
-          text-3xl
-          font-bold
-          mt-2
-          "
-        >
-
+        <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
           {value}
-
         </h2>
-
-        <div
-          className="
-          flex
-          items-center
-          gap-1
-          mt-3
-          text-green-600
-          text-sm
-          "
-        >
-
-          <TrendingUp size={16} />
-
-          <span>
-
-            +0%
-
-          </span>
-
-        </div>
-
       </div>
 
-      <div
-        className={`
-          w-16
-          h-16
-          rounded-2xl
-          flex
-          items-center
-          justify-center
-          ${color}
-        `}
-      >
-
-        <Icon
-          size={30}
-          className={iconColor}
-        />
-
+      <div className={`flex h-14 w-14 items-center justify-center ${color}`}>
+        <Icon size={26} className={iconColor} />
       </div>
-
     </div>
-
   );
-
 }
 
 export default DashboardCard;

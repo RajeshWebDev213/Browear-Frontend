@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 /* ==========================================
    Layouts
-========================================== */
+/*  */
 
 import MainLayout from "./layouts/MainLayout";
 import AuthLayout from "./layouts/AuthLayout";
@@ -11,7 +11,7 @@ import AccountLayout from "./layouts/AccountLayout";
 
 /* ==========================================
    Route Guards
-========================================== */
+/*  */
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
@@ -21,7 +21,7 @@ import AdminRoute from "./routes/AdminRoute";
 
 /* ==========================================
    Authentication Pages
-========================================== */
+/*  */
 
 import Login from "./Pages/Auth/Login";
 import Signup from "./Pages/Auth/Signup";
@@ -32,7 +32,7 @@ import ResetPassword from "./Pages/Auth/ResetPassword";
 
 /* ==========================================
    Customer Pages
-========================================== */
+/*  */
 
 import Home from "./Pages/Home/Home";
 
@@ -50,7 +50,7 @@ import Wishlist from "./Pages/Wishlist/Wishlist";
 
 /* ==========================================
    Profile Pages
-========================================== */
+/*  */
 
 import Account from "./Pages/Profile/Account";
 import EditProfile from "./Pages/Profile/EditProfile";
@@ -60,7 +60,7 @@ import ChangePassword from "./Pages/Profile/ChangePassword";
 
 /* ==========================================
    Admin Pages
-========================================== */
+/*  */
 
 import Dashboard from "./Pages/Admin/Dashboard";
 
@@ -81,7 +81,7 @@ import Settings from "./Pages/Admin/Settings";
 
 /* ==========================================
    Common
-========================================== */
+/*  */
 
 import NotFound from "./Pages/NotFound";
 function App() {
@@ -92,7 +92,7 @@ function App() {
 
       {/* ==========================================
           Authentication Routes
-      ========================================== */}
+/*  */}
 
       <Route element={<AuthLayout />}>
 
@@ -154,7 +154,7 @@ function App() {
 
       {/* ==========================================
           Customer Routes
-      ========================================== */}
+/*  */}
 
       <Route element={<MainLayout />}>
 
@@ -223,7 +223,7 @@ function App() {
 
         {/* ==========================================
             Account Routes
-        ========================================== */}
+/*  */}
 
         <Route
           path="/account"
@@ -265,7 +265,7 @@ function App() {
 
       {/* ==========================================
           Admin Routes
-      ========================================== */}
+/*  */}
 
       <Route
         path="/admin"
@@ -347,7 +347,7 @@ function App() {
 
       {/* ==========================================
           404 Page
-      ========================================== */}
+/*  */}
 
       <Route
         path="*"

@@ -38,6 +38,7 @@ export const resetPassword = async (data) => {
 
 // Get Logged User
 export const getAccount = async () => {
+  
   const res = await api.get("/auth/me");
   return res.data;
 };

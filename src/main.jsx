@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
+import ScrollToTop from "./components/common/ScrollToTop";
 import App from "./App";
 import AppProvider from "./context/AppProvider";
 
@@ -16,7 +16,7 @@ ReactDOM.createRoot(
     <BrowserRouter>
 
       <AppProvider>
-
+     <ScrollToTop/>
         <App />
 
         <Toaster

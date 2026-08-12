@@ -1,217 +1,131 @@
 import { Link } from "react-router-dom";
+import { Eye, PackageSearch } from "lucide-react";
 
-import {
-  Eye,
-} from "lucide-react";
-
-function UsersTable({
-
-  users = [],
-
-}) {
-
+function OrdersTable({ orders = [] }) {
   return (
-
-    <div
-      className="
-      bg-white
-      rounded-2xl
-      border
-      border-gray-200
-      shadow-sm
-      overflow-hidden
-      "
-    >
-
+    <div className="border border-gray-200">
       <div className="overflow-x-auto">
-
-        <table className="w-full">
-
-          <thead className="bg-gray-50">
-
-            <tr>
-
-              <th className="px-6 py-4 text-left">
-
-                Name
-
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-200 bg-gray-50">
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Order ID
               </th>
-
-              <th className="px-6 py-4 text-left">
-
-                Email
-
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Customer
               </th>
-
-              <th className="px-6 py-4 text-left">
-
-                Phone
-
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Amount
               </th>
-
-              <th className="px-6 py-4 text-left">
-
-                Role
-
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Payment
               </th>
-
-              <th className="px-6 py-4 text-left">
-
-                Joined
-
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Status
               </th>
-
-              <th className="px-6 py-4 text-center">
-
+              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Date
+              </th>
+              <th className="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-400">
                 Action
-
               </th>
-
             </tr>
-
           </thead>
 
-          <tbody>
-
-            {
-
-              users.length === 0 ? (
-
-                <tr>
-
-                  <td
-                    colSpan="6"
-                    className="
-                    py-16
-                    text-center
-                    text-gray-500
-                    "
-                  >
-
-                    No Users Found
-
+          <tbody className="divide-y divide-gray-100">
+            {orders.length === 0 ? (
+              <tr>
+                <td colSpan="7">
+                  <div className="flex flex-col items-center py-20">
+                    <PackageSearch size={44} className="text-gray-300" />
+                    <h2 className="mt-4 text-base font-semibold text-gray-900">
+                      No Orders Found
+                    </h2>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Orders will appear here once placed.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              orders.map((order) => (
+                <tr
+                  key={order._id}
+                  className="transition-colors hover:bg-gray-50"
+                >
+                  {/* Order ID */}
+                  <td className="px-6 py-4 font-medium text-gray-900">
+                    #{order._id.slice(-6)}
                   </td>
 
-                </tr>
+                  {/* Customer */}
+                  <td className="px-6 py-4 text-gray-700">
+                    {order.user?.fullname || "Deleted User"}
+                  </td>
 
-              ) : (
+                  {/* Amount */}
+                  <td className="px-6 py-4 font-semibold text-gray-900">
+                    ₹{order.totalPrice?.toFixed(2)}
+                  </td>
 
-                users.map((user) => (
+                  {/* Payment */}
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-2.5 py-1 text-xs font-medium ${
+                        order.paymentStatus === "Paid"
+                          ? "bg-green-50 text-green-700"
+                          : "bg-yellow-50 text-yellow-700"
+                      }`}
+                    >
+                      {order.paymentStatus}
+                    </span>
+                  </td>
 
-                  <tr
+                  {/* Order Status */}
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-2.5 py-1 text-xs font-medium ${
+                        order.orderStatus === "Pending"
+                          ? "bg-yellow-50 text-yellow-700"
+                          : order.orderStatus === "Confirmed"
+                          ? "bg-blue-50 text-blue-700"
+                          : order.orderStatus === "Shipped"
+                          ? "bg-indigo-50 text-indigo-700"
+                          : order.orderStatus === "Out for Delivery"
+                          ? "bg-purple-50 text-purple-700"
+                          : order.orderStatus === "Delivered"
+                          ? "bg-green-50 text-green-700"
+                          : "bg-red-50 text-red-600"
+                      }`}
+                    >
+                      {order.orderStatus}
+                    </span>
+                  </td>
 
-                    key={user._id}
+                  {/* Date */}
+                  <td className="px-6 py-4 text-gray-500">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </td>
 
-                    className="
-                    border-t
-                    hover:bg-gray-50
-                    "
-
-                  >
-
-                    <td className="px-6 py-4">
-
-                      {user.fullname}
-
-                    </td>
-
-                    <td className="px-6 py-4">
-
-                      {user.email}
-
-                    </td>
-
-                    <td className="px-6 py-4">
-
-                      {user.phonenumber || "-"}
-
-                    </td>
-
-                    <td className="px-6 py-4">
-
-                      <span
-                        className={`
-                        px-3
-                        py-1
-                        rounded-full
-                        text-sm
-
-                        ${
-                          user.role === "admin"
-
-                            ? "bg-purple-100 text-purple-700"
-
-                            : "bg-gray-100 text-gray-700"
-
-                        }
-                        `}
+                  {/* Action */}
+                  <td className="px-6 py-4">
+                    <div className="flex justify-center">
+                      <Link
+                        to={`/admin/orders/${order._id}`}
+                        className="flex h-8 w-8 items-center justify-center border border-gray-200 text-gray-500 transition-colors hover:border-black hover:text-black"
                       >
-
-                        {user.role}
-
-                      </span>
-
-                    </td>
-
-                    <td className="px-6 py-4">
-
-                      {
-
-                        new Date(
-                          user.createdAt
-                        ).toLocaleDateString()
-
-                      }
-
-                    </td>
-
-                    <td className="px-6 py-4">
-
-                      <div className="flex justify-center">
-
-                        <Link
-
-                          to={`/admin/users/${user._id}`}
-
-                          className="
-                          p-2
-                          rounded-lg
-                          bg-blue-100
-                          hover:bg-blue-200
-                          transition
-                          "
-
-                        >
-
-                          <Eye
-                            size={18}
-                            className="text-blue-600"
-                          />
-
-                        </Link>
-
-                      </div>
-
-                    </td>
-
-                  </tr>
-
-                ))
-
-              )
-
-            }
-
+                        <Eye size={15} />
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
-
         </table>
-
       </div>
-
     </div>
-
   );
-
 }
 
-export default UsersTable;
+export default OrdersTable;

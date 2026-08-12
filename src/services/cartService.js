@@ -1,10 +1,6 @@
 import api from "./api";
 
-/*
-=========================================
-GET CART
-=========================================
-*/
+
 
 export const getCart = async () => {
 
@@ -14,11 +10,7 @@ export const getCart = async () => {
 
 };
 
-/*
-=========================================
-GET CART COUNT
-=========================================
-*/
+
 
 export const getCartCount = async () => {
 
@@ -28,11 +20,7 @@ export const getCartCount = async () => {
 
 };
 
-/*
-=========================================
-GET CART SUMMARY
-=========================================
-*/
+
 
 export const getCartSummary = async () => {
 
@@ -42,21 +30,19 @@ export const getCartSummary = async () => {
 
 };
 
-/*
-=========================================
-ADD TO CART
-=========================================
-*/
+
 
 export const addToCart = async (
   productId,
-  quantity = 1
+  quantity = 1,
+  size
 ) => {
 
   const res = await api.post(
     `/cart/${productId}`,
     {
       quantity,
+      size,
     }
   );
 
@@ -64,21 +50,19 @@ export const addToCart = async (
 
 };
 
-/*
-=========================================
-UPDATE CART QUANTITY
-=========================================
-*/
+
 
 export const updateCartQuantity = async (
   productId,
-  quantity
+  quantity,
+  size
 ) => {
 
   const res = await api.put(
     `/cart/${productId}`,
     {
       quantity,
+      size,
     }
   );
 
@@ -86,29 +70,27 @@ export const updateCartQuantity = async (
 
 };
 
-/*
-=========================================
-REMOVE FROM CART
-=========================================
-*/
+
 
 export const removeFromCart = async (
-  productId
+  productId,
+  size
 ) => {
 
   const res = await api.delete(
-    `/cart/${productId}`
+    `/cart/${productId}`,
+    {
+      data: {
+        size,
+      },
+    }
   );
 
   return res.data;
 
 };
 
-/*
-=========================================
-CLEAR CART
-=========================================
-*/
+
 
 export const clearCart = async () => {
 
@@ -118,11 +100,7 @@ export const clearCart = async () => {
 
 };
 
-/*
-=========================================
-CHECKOUT VALIDATION
-=========================================
-*/
+
 
 export const checkoutValidation = async () => {
 

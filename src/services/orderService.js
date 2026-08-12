@@ -1,10 +1,6 @@
 import api from "./api";
 
-/*
-=========================================
-PLACE ORDER
-=========================================
-*/
+
 
 export const placeOrder = async (orderData) => {
 
@@ -17,11 +13,7 @@ export const placeOrder = async (orderData) => {
 
 };
 
-/*
-=========================================
-GET MY ORDERS
-=========================================
-*/
+
 
 export const getMyOrders = async () => {
 
@@ -33,11 +25,7 @@ export const getMyOrders = async () => {
 
 };
 
-/*
-=========================================
-GET SINGLE ORDER
-=========================================
-*/
+
 
 export const getSingleOrder = async (
   orderId
@@ -50,30 +38,36 @@ export const getSingleOrder = async (
   return res.data;
 
 };
+export const getAdminSingleOrder = async (orderId) => {
 
-/*
-=========================================
-CANCEL ORDER
-=========================================
-*/
-
-export const cancelOrder = async (
-  orderId
-) => {
-
-  const res = await api.put(
-    `/orders/${orderId}/cancel`
+  const res = await api.get(
+    `/orders/admin/${orderId}`
   );
 
   return res.data;
 
 };
 
-/*
-=========================================
-ADMIN - GET ALL ORDERS
-=========================================
-*/
+
+
+export const cancelOrder = async (
+  orderId,
+  data
+) => {
+
+  const res = await api.put(
+
+    `/orders/${orderId}/cancel`,
+
+    data
+
+  );
+
+  return res.data;
+
+};
+
+
 
 export const getAllOrders = async () => {
 
@@ -85,21 +79,17 @@ export const getAllOrders = async () => {
 
 };
 
-/*
-=========================================
-ADMIN - UPDATE ORDER STATUS
-=========================================
-*/
+
 
 export const updateOrderStatus = async (
   orderId,
-  status
+  orderStatus
 ) => {
 
   const res = await api.put(
     `/orders/admin/${orderId}/status`,
     {
-      status,
+      orderStatus,
     }
   );
 
@@ -107,11 +97,9 @@ export const updateOrderStatus = async (
 
 };
 
-/*
-=========================================
-ADMIN - ORDER STATISTICS
-=========================================
-*/
+
+//ADMIN - ORDER STATISTICS
+
 
 export const getOrderStats = async () => {
 

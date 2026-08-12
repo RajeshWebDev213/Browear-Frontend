@@ -70,12 +70,15 @@ TOGGLE WISHLIST
 =========================================
 */
 
-export const toggleWishlist = async (
-  productId
-) => {
+export const toggleWishlist = async (product) => {
+
+  const id =
+    typeof product === "string"
+      ? product
+      : product._id || product.id;
 
   const res = await api.post(
-    `/wishlist/toggle/${productId}`
+    `/wishlist/toggle/${id}`
   );
 
   return res.data;

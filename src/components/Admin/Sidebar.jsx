@@ -7,29 +7,38 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+
 import {
   NavLink,
   useNavigate,
 } from "react-router-dom";
+
 import { useContext } from "react";
 
 import { AuthContext } from "../../context/AuthContext";
 import { showSuccess } from "../../utils/toast";
+
+
 function Sidebar() {
 
   const navigate = useNavigate();
-  const {logout} = useContext(AuthContext);
-const handleLogout = () => {
 
-  logout();
+  const { logout } =
+    useContext(AuthContext);
 
-  showSuccess(
-    "Logged out successfully"
-  );
 
-  navigate("/login");
+  const handleLogout = () => {
 
-};
+    logout();
+
+    showSuccess(
+      "Logged out successfully"
+    );
+
+    navigate("/login");
+
+  };
+
 
   const menuItems = [
 
@@ -71,20 +80,27 @@ const handleLogout = () => {
 
   ];
 
+
   return (
 
     <aside
       className="
-      w-72
+      w-20
+      sm:w-60
+      lg:w-72
       min-h-screen
       bg-black
       text-white
       flex
       flex-col
+      shrink-0
       "
     >
 
-      {/* Logo */}
+
+      {/* =========================
+          LOGO
+/*  */}
 
       <div
         className="
@@ -94,14 +110,37 @@ const handleLogout = () => {
         justify-center
         border-b
         border-zinc-800
+        px-2
         "
       >
 
+        {/* Mobile */}
+
         <h1
           className="
-          text-2xl
+          block
+          sm:hidden
+          text-lg
           font-bold
           tracking-wider
+          "
+        >
+
+          B
+
+        </h1>
+
+
+        {/* Tablet/Desktop */}
+
+        <h1
+          className="
+          hidden
+          sm:block
+          text-xl
+          lg:text-2xl
+          font-bold
+          tracking-[0.2em]
           "
         >
 
@@ -111,106 +150,162 @@ const handleLogout = () => {
 
       </div>
 
-      {/* Navigation */}
+
+      {/* =========================
+          NAVIGATION
+/*  */}
 
       <nav
         className="
         flex-1
-        px-4
-        py-6
-        space-y-2
+        px-2
+        sm:px-3
+        lg:px-4
+        py-5
+        sm:py-6
+        space-y-1
         "
       >
 
-        {
+        {menuItems.map((item) => {
 
-          menuItems.map((item) => {
+          const Icon =
+            item.icon;
 
-            const Icon = item.icon;
 
-            return (
+          return (
 
-              <NavLink
+            <NavLink
 
-                key={item.title}
+              key={item.title}
 
-                to={item.path}
+              to={item.path}
 
-                className={({ isActive }) =>
+              title={item.title}
 
-                  `
-                  flex
-                  items-center
-                  gap-4
-                  px-4
-                  py-3
-                  rounded-xl
-                  transition-all
-                  duration-300
+              className={({
+                isActive,
+              }) =>
 
-                  ${
-                    isActive
-                      ? "bg-white text-black font-semibold"
-                      : "hover:bg-zinc-900 text-gray-300"
-                  }
-                  `
+                `
+                flex
+                items-center
+                justify-center
+                sm:justify-start
+                gap-3
+                lg:gap-4
+                px-2
+                sm:px-3
+                lg:px-4
+                py-3
+                border-l-2
+                transition-colors
+                duration-200
+
+                ${
+                  isActive
+
+                    ? "bg-zinc-900 border-white text-white font-medium"
+
+                    : "border-transparent hover:bg-zinc-950 hover:border-zinc-700 text-gray-400"
                 }
+                `
 
+              }
+
+            >
+
+              <Icon
+                size={19}
+                className="shrink-0"
+              />
+
+
+              <span
+                className="
+                hidden
+                sm:inline
+                text-sm
+                lg:text-base
+                "
               >
 
-                <Icon size={20} />
+                {item.title}
 
-                <span>
+              </span>
 
-                  {item.title}
+            </NavLink>
 
-                </span>
+          );
 
-              </NavLink>
-
-            );
-
-          })
-
-        }
+        })}
 
       </nav>
 
-      {/* Logout */}
+
+      {/* =========================
+          LOGOUT
+/*  */}
 
       <div
         className="
-        p-4
+        p-2
+        sm:p-3
+        lg:p-4
         border-t
         border-zinc-800
         "
       >
 
-<button
+        <button
 
-  onClick={handleLogout}
+          onClick={
+            handleLogout
+          }
 
-  className="
-  w-full
-  mt-auto
-  flex
-  items-center
-  gap-3
-  px-4
-  py-3
-  rounded-xl
-  text-red-600
-  hover:bg-red-50
-  transition
-  "
+          title="Logout"
 
->
+          className="
+          w-full
+          flex
+          items-center
+          justify-center
+          sm:justify-start
+          gap-3
+          px-2
+          sm:px-3
+          lg:px-4
+          py-3
+          border
+          border-transparent
+          text-red-400
+          hover:border-red-900
+          hover:bg-red-950/40
+          transition
+          "
 
-  <LogOut size={20} />
+        >
 
-  Logout
+          <LogOut
+            size={19}
+            className="shrink-0"
+          />
 
-</button>
+
+          <span
+            className="
+            hidden
+            sm:inline
+            text-sm
+            lg:text-base
+            "
+          >
+
+            Logout
+
+          </span>
+
+        </button>
 
       </div>
 
@@ -219,5 +314,6 @@ const handleLogout = () => {
   );
 
 }
+
 
 export default Sidebar;

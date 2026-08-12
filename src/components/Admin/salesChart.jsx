@@ -1,71 +1,71 @@
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
+// import {
+//   ResponsiveContainer,
+//   LineChart,
+//   Line,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+//   Tooltip,
+// } from "recharts";
 
-function SalesChart({ data }) {
+// function SalesChart({ data }) {
 
-  return (
+//   return (
 
-    <div
-      className="
-      bg-white
-      rounded-2xl
-      border
-      border-gray-200
-      shadow-sm
-      p-6
-      h-96
-      "
-    >
+//     <div
+//       className="
+//       bg-white
+//       rounded-xl
+//       border
+//       border-gray-200
+//       shadow-sm
+//       p-6
+//       h-96
+//       "
+//     >
 
-      <h2
-        className="
-        text-xl
-        font-semibold
-        mb-6
-        "
-      >
+//       <h2
+//         className="
+//         text-xl
+//         font-semibold
+//         mb-6
+//         "
+//       >
 
-        Monthly Sales
+//         Monthly Sales
 
-      </h2>
+//       </h2>
 
-      <ResponsiveContainer
-        width="100%"
-        height="85%"
-      >
+//       <ResponsiveContainer
+//         width="100%"
+//         height="85%"
+//       >
 
-        <LineChart data={data}>
+//         <LineChart data={data}>
 
-          <CartesianGrid strokeDasharray="3 3" />
+//           <CartesianGrid strokeDasharray="3 3" />
 
-          <XAxis dataKey="month" />
+//           <XAxis dataKey="month" />
 
-          <YAxis />
+//           <YAxis />
 
-          <Tooltip />
+//           <Tooltip />
 
-          <Line
-            type="monotone"
-            dataKey="sales"
-            stroke="#000000"
-            strokeWidth={3}
-          />
+//           <Line
+//             type="monotone"
+//             dataKey="sales"
+//             stroke="#000000"
+//             strokeWidth={3}
+//           />
 
-        </LineChart>
+//         </LineChart>
 
-      </ResponsiveContainer>
+//       </ResponsiveContainer>
 
-    </div>
+//     </div>
 
-  );
+//   );
 
-}
+// }
 
-export default SalesChart;
+// export default SalesChart;

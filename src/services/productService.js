@@ -1,43 +1,27 @@
 import api from "./api";
 
-/*
-=========================================
-GET ALL PRODUCTS
-=========================================
-*/
+
 
 export const getAllProducts = async () => {
-  const res = await api.get("/products");
+  const res = await api.get("/products?limit=1000");
   return res.data;
 };
 
-/*
-=========================================
-GET SINGLE PRODUCT
-=========================================
-*/
+
 
 export const getProductById = async (id) => {
   const res = await api.get(`/products/${id}`);
   return res.data;
 };
 
-/*
-=========================================
-GET PRODUCTS BY CATEGORY
-=========================================
-*/
+
 
 export const getProductsByCategory = async (category) => {
   const res = await api.get(`/products/category/${category}`);
   return res.data;
 };
 
-/*
-=========================================
-ADD PRODUCT (ADMIN)
-=========================================
-*/
+
 
 export const addProduct = async (formData) => {
   const res = await api.post(
@@ -53,11 +37,7 @@ export const addProduct = async (formData) => {
   return res.data;
 };
 
-/*
-=========================================
-UPDATE PRODUCT (ADMIN)
-=========================================
-*/
+
 
 export const updateProduct = async (
   id,
@@ -76,15 +56,47 @@ export const updateProduct = async (
   return res.data;
 };
 
-/*
-=========================================
-DELETE PRODUCT (ADMIN)
-=========================================
-*/
 
 export const deleteProduct = async (id) => {
   const res = await api.delete(
     `/products/${id}`
+  );
+
+  return res.data;
+};
+
+// TRENDING PRODUCTS
+
+
+export const getTrendingProducts = async () => {
+  const res = await api.get(
+    "/product/trending"
+  );
+
+  return res.data;
+};
+
+
+
+// 50% OFF PRODUCTS
+
+
+export const getOfferProducts = async () => {
+  const res = await api.get(
+    "/product/offers"
+  );
+
+  return res.data;
+};
+
+
+
+// BEST SELLER PRODUCTS
+
+
+export const getBestSellerProducts = async () => {
+  const res = await api.get(
+    "/product/bestseller"
   );
 
   return res.data;

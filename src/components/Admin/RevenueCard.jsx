@@ -1,6 +1,7 @@
 import {
   IndianRupee,
   TrendingUp,
+  TrendingDown,
 } from "lucide-react";
 
 function RevenueCard({
@@ -13,15 +14,15 @@ function RevenueCard({
 
 }) {
 
+  const isPositive = Number(growth) >= 0;
+
   return (
 
     <div
       className="
       bg-white
-      rounded-2xl
       border
       border-gray-200
-      shadow-sm
       p-6
       "
     >
@@ -30,13 +31,13 @@ function RevenueCard({
         className="
         flex
         justify-between
-        items-center
+        items-start
         "
       >
 
         <div>
 
-          <p className="text-gray-500">
+          <p className="text-xs uppercase tracking-widest text-gray-400">
 
             Total Revenue
 
@@ -46,6 +47,7 @@ function RevenueCard({
             className="
             text-4xl
             font-bold
+            text-black
             mt-3
             "
           >
@@ -58,19 +60,20 @@ function RevenueCard({
 
         <div
           className="
-          w-16
-          h-16
-          rounded-2xl
-          bg-green-100
+          w-12
+          h-12
+          border
+          border-gray-200
           flex
           items-center
           justify-center
+          shrink-0
           "
         >
 
           <IndianRupee
-            size={32}
-            className="text-green-600"
+            size={22}
+            className="text-black"
           />
 
         </div>
@@ -82,13 +85,17 @@ function RevenueCard({
         mt-8
         grid
         grid-cols-2
-        gap-6
+        divide-x
+        divide-gray-100
+        border-t
+        border-gray-100
+        pt-6
         "
       >
 
         <div>
 
-          <p className="text-gray-500">
+          <p className="text-xs uppercase tracking-widest text-gray-400">
 
             Avg Order
 
@@ -96,8 +103,9 @@ function RevenueCard({
 
           <h3
             className="
-            text-2xl
+            text-xl
             font-semibold
+            text-black
             mt-2
             "
           >
@@ -108,9 +116,9 @@ function RevenueCard({
 
         </div>
 
-        <div>
+        <div className="pl-6">
 
-          <p className="text-gray-500">
+          <p className="text-xs uppercase tracking-widest text-gray-400">
 
             Growth
 
@@ -120,24 +128,36 @@ function RevenueCard({
             className="
             flex
             items-center
-            gap-2
+            gap-1.5
             mt-2
             "
           >
 
-            <TrendingUp
-              size={20}
-              className="text-green-600"
-            />
+            {isPositive ? (
+
+              <TrendingUp
+                size={17}
+                className="text-black"
+              />
+
+            ) : (
+
+              <TrendingDown
+                size={17}
+                className="text-black"
+              />
+
+            )}
 
             <span
               className="
               text-xl
               font-semibold
-              text-green-600
+              text-black
               "
             >
 
+              {isPositive ? "+" : ""}
               {growth}%
 
             </span>

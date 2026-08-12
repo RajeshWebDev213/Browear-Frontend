@@ -5,324 +5,137 @@ import { Heart, Eye, Trash2 } from "lucide-react";
 import { WishlistContext } from "../../context/WishlistContext";
 
 function Wishlist() {
-
-  const {
-    wishlist,
-    removeFromWishlist,
-  } = useContext(WishlistContext);
+  const { wishlist, removeFromWishlist } = useContext(WishlistContext);
 
   if (wishlist.length === 0) {
-
     return (
-
-      <div className="min-h-[80vh] flex flex-col justify-center items-center text-center px-5">
-
-        <div className="w-24 h-24 rounded-full bg-red-100 flex items-center justify-center">
-
-          <Heart
-            size={42}
-            className="text-red-500"
-          />
-
+      <div className="flex min-h-[80vh] flex-col items-center justify-center px-5 text-center">
+        <div className="flex h-20 w-20 items-center justify-center border border-gray-200">
+          <Heart size={32} className="text-gray-400" />
         </div>
 
-        <h1 className="text-3xl font-bold mt-6">
-
-          Your Wishlist is Empty
-
+        <h1 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+          Your wishlist is empty
         </h1>
 
-        <p className="text-gray-500 mt-3 max-w-md">
-
-          Save your favourite fashion products here and
-          access them anytime.
-
+        <p className="mt-3 max-w-md text-sm text-gray-500">
+          Save your favourite fashion products here and access them anytime.
         </p>
 
         <Link
-
           to="/products"
-
-          className="
-          mt-8
-          bg-black
-          text-white
-          px-8
-          py-3
-          rounded-xl
-          hover:bg-zinc-900
-          transition
-          "
-
+          className="mt-8 bg-black px-8 py-3 text-sm font-medium tracking-wide text-white transition-colors duration-300 hover:bg-zinc-800"
         >
-
           Continue Shopping
-
         </Link>
-
       </div>
-
     );
-
   }
 
   return (
-
-    <section className="max-w-7xl mx-auto px-5 py-10">
-
-      <div className="flex justify-between items-center mb-10">
-
+    <section className="mx-auto max-w-7xl px-5 py-10">
+      <div className="mb-10 flex items-end justify-between border-b border-gray-200 pb-6">
         <div>
-
-          <h1 className="text-4xl font-bold">
-
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+            Saved Items
+          </span>
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900">
             My Wishlist
-
           </h1>
-
-          <p className="text-gray-500 mt-2">
-
-            {wishlist.length} Saved Products
-
-          </p>
-
         </div>
-
+        <p className="text-sm text-gray-500">
+          {wishlist.length} {wishlist.length === 1 ? "product" : "products"}
+        </p>
       </div>
 
-      <div
-        className="
-        grid
-        grid-cols-1
-        sm:grid-cols-2
-        lg:grid-cols-3
-        xl:grid-cols-4
-        gap-8
-        "
-      >
-
+      <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {wishlist.map((item) => {
-
           const image =
-
             item.images?.[0]?.url ||
-
             item.img ||
-
             "https://placehold.co/500x650?text=Browear";
 
           const finalPrice =
-            item.price -
-            (item.price * (item.discount || 0)) / 100;
+            item.price - (item.price * (item.discount || 0)) / 100;
 
           return (
-
-            <div
-
-              key={item._id || item.id}
-
-              className="
-              group
-              bg-white
-              rounded-3xl
-              overflow-hidden
-              border
-              border-gray-200
-              shadow-sm
-              hover:shadow-xl
-              transition-all
-              duration-300
-              "
-
-            >
-
-              {/* IMAGE */}
-
-              <div className="relative overflow-hidden">
-
-                <img
-
-                  src={image}
-
-                  alt={item.name}
-
-                  className="
-                  w-full
-                  h-80
-                  object-cover
-                  group-hover:scale-105
-                  transition-transform
-                  duration-500
-                  "
-
-                />
+            <div key={item._id || item.id} className="group relative bg-white">
+              {/* Image */}
+              <div className="relative overflow-hidden bg-gray-50">
+                <Link to={`/products/${item._id || item.id}`}>
+                  <img
+                    src={image}
+                    alt={item.name}
+                    className="h-80 w-full object-cover transition-all duration-700 ease-out group-hover:scale-105"
+                  />
+                </Link>
 
                 {item.discount > 0 && (
-
-                  <span
-                    className="
-                    absolute
-                    top-4
-                    left-4
-                    bg-black
-                    text-white
-                    text-xs
-                    px-3
-                    py-1
-                    rounded-full
-                    "
-                  >
-
-                    {item.discount}% OFF
-
+                  <span className="absolute top-3 left-3 bg-black px-2.5 py-1 text-[11px] font-medium tracking-wide text-white">
+                    −{item.discount}%
                   </span>
-
                 )}
 
+                {/* Remove */}
                 <button
-
-                  onClick={() =>
-                    removeFromWishlist(
-                      item._id || item.id
-                    )
-                  }
-
-                  className="
-                  absolute
-                  top-4
-                  right-4
-                  w-10
-                  h-10
-                  rounded-full
-                  bg-white
-                  flex
-                  items-center
-                  justify-center
-                  shadow
-                  hover:bg-red-500
-                  hover:text-white
-                  transition
-                  "
-
+                  onClick={() => removeFromWishlist(item._id || item.id)}
+                  className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center border border-black/10 bg-white/90 text-black backdrop-blur transition-colors duration-300 hover:border-red-500 hover:bg-red-500 hover:text-white"
                 >
-
-                  <Heart
-                    size={18}
-                    fill="currentColor"
-                  />
-
+                  <Heart size={16} fill="currentColor" />
                 </button>
 
+                {/* View — slides up on hover */}
+                <Link
+                  to={`/products/${item._id || item.id}`}
+                  className="
+                    absolute inset-x-0 bottom-0
+                    flex items-center justify-center gap-2
+                    bg-black py-3 text-sm font-medium text-white
+                    translate-y-full opacity-0
+                    transition-all duration-300 ease-out
+                    group-hover:translate-y-0 group-hover:opacity-100
+                  "
+                >
+                  <Eye size={15} />
+                  View Product
+                </Link>
               </div>
 
-              {/* CONTENT */}
-
-              <div className="p-5">
-
-                <p className="uppercase text-xs tracking-widest text-gray-500">
-
+              {/* Details */}
+              <div className="pt-4">
+                <p className="text-[11px] uppercase tracking-[0.15em] text-gray-400">
                   {item.category}
-
                 </p>
-
-                <h3 className="font-semibold text-lg mt-2 line-clamp-2">
-
+                <h3 className="mt-1 line-clamp-2 min-h-[48px] text-[15px] font-medium leading-snug text-gray-900">
                   {item.name}
-
                 </h3>
 
-                <div className="flex items-center gap-3 mt-5">
-
-                  <span className="text-2xl font-bold">
-
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="text-lg font-semibold text-gray-900">
                     ₹{finalPrice.toFixed(0)}
-
                   </span>
-
                   {item.discount > 0 && (
-
-                    <span className="text-gray-400 line-through">
-
+                    <span className="text-sm text-gray-400 line-through">
                       ₹{item.price}
-
                     </span>
-
                   )}
-
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 mt-6">
-
-                  <Link
-
-                    to={`/products/${item._id || item.id}`}
-
-                    className="
-                    h-11
-                    rounded-xl
-                    border
-                    flex
-                    items-center
-                    justify-center
-                    gap-2
-                    hover:bg-black
-                    hover:text-white
-                    transition
-                    "
-
-                  >
-
-                    <Eye size={18} />
-
-                    View
-
-                  </Link>
-
-                  <button
-
-                    onClick={() =>
-                      removeFromWishlist(
-                        item._id || item.id
-                      )
-                    }
-
-                    className="
-                    h-11
-                    rounded-xl
-                    bg-red-500
-                    text-white
-                    flex
-                    items-center
-                    justify-center
-                    gap-2
-                    hover:bg-red-600
-                    transition
-                    "
-
-                  >
-
-                    <Trash2 size={18} />
-
-                    Remove
-
-                  </button>
-
-                </div>
-
+                {/* Remove — text link instead of full red button */}
+                <button
+                  onClick={() => removeFromWishlist(item._id || item.id)}
+                  className="mt-3 flex items-center gap-1.5 text-xs text-gray-400 transition-colors hover:text-red-500"
+                >
+                  <Trash2 size={13} />
+                  Remove from wishlist
+                </button>
               </div>
-
             </div>
-
           );
-
         })}
-
       </div>
-
     </section>
-
   );
-
 }
 
 export default Wishlist;

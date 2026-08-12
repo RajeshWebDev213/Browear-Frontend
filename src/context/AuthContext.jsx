@@ -4,9 +4,7 @@ import {
   useState,
 } from "react";
 
-import {
-  getAccount,
-} from "../services/authService";
+import * as authService from "../services/authService";
 
 export const AuthContext = createContext();
 
@@ -27,10 +25,15 @@ export const AuthProvider = ({
 
 const refreshProfile = async () => {
 
-  const token =
-    localStorage.getItem("token");
+  
+
+  const token = sessionStorage.getItem("token");
+
+  
 
   if (!token) {
+
+    
 
     setLoading(false);
 
@@ -38,27 +41,30 @@ const refreshProfile = async () => {
 
   }
 
+  
   try {
 
-    const data =
-      await getAccount();
+  
 
-    setUser(data);
+   
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(data)
-    );
+const data = await authService.getAccount();
+
+
+
+    
+
+    setUser(data.user);
 
   } catch (err) {
 
-    if (err.response?.status === 401) {
 
-      logout();
 
-    }
+  alert(err.response?.status);
 
-  } finally {
+} finally {
+
+  
 
     setLoading(false);
 
@@ -82,7 +88,7 @@ const login = (userData) => {
 
   setUser(userData);
 
-  localStorage.setItem(
+  sessionStorage.setItem(
     "user",
     JSON.stringify(userData)
   );
@@ -101,13 +107,13 @@ const login = (userData) => {
 
     setUser(null);
 
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
 
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
 
-    localStorage.removeItem("otpAccess");
+    sessionStorage.removeItem("otpAccess");
 
-    localStorage.removeItem("personalAccess");
+    sessionStorage.removeItem("personalAccess");
 
   };
 

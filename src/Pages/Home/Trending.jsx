@@ -1,232 +1,128 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Star, Flame } from "lucide-react";
+
 import api from "../../services/api";
 
 function Trending() {
-
   const [products, setProducts] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     fetchTrending();
-
   }, []);
 
   const fetchTrending = async () => {
-
     try {
-
-      const response = await api.get(
-        "/product/trending"
-      );
-
+      const response = await api.get("/products/trending");
       setProducts(response.data.products);
-
     } catch (error) {
-
       console.log(error);
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
-  if (loading) {
-
-    return (
-
-      <section className="max-w-7xl mx-auto px-5 py-16">
-
-        <h2 className="text-4xl font-bold mb-8">
-
-          Trending Now
-
-        </h2>
-
-        <p>Loading...</p>
-
-      </section>
-
-    );
-
-  }
-
   return (
-
-    <section className="max-w-7xl mx-auto px-5 py-16">
-
+    <section className="mx-auto max-w-7xl px-5 py-16">
       {/* Heading */}
-
-      <div className="flex justify-between items-center mb-10">
-
+      <div className="mb-12 flex items-end justify-between border-b border-gray-200 pb-6">
         <div>
-
-          <h2 className="text-4xl font-bold">
-
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">
+            What's Hot
+          </span>
+          <h2 className="mt-2 text-4xl font-bold tracking-tight">
             Trending Now
-
           </h2>
-
-          <p className="text-gray-500 mt-2">
-
-            Discover what's popular among our customers.
-
-          </p>
-
         </div>
 
         <Link
           to="/products"
-          className="flex items-center gap-2 hover:underline"
+          className="hidden items-center gap-1.5 text-sm font-medium text-gray-900 md:flex"
         >
-
           View All
-
-          <ArrowRight size={18} />
-
+          <ArrowRight size={15} />
         </Link>
-
       </div>
 
       {/* Products */}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-
-        {products.map((product) => (
-
-          <Link
-
-            key={product._id}
-
-            to={`/product/${product._id}`}
-
-          >
-
-            <div
-              className="
-              bg-white
-              rounded-3xl
-              overflow-hidden
-              shadow-md
-              hover:shadow-xl
-              transition-all
-              duration-300
-              group
-              "
+      {loading ? (
+        <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="h-80 w-full bg-gray-100" />
+              <div className="mt-4 h-3 w-1/3 bg-gray-100" />
+              <div className="mt-2 h-4 w-2/3 bg-gray-100" />
+              <div className="mt-3 h-5 w-1/4 bg-gray-100" />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          {products.slice(0, 4).map((product) => (
+            <Link
+              key={product._id}
+              to={`/products/${product._id}`}
+              className="group relative block bg-white"
             >
-
-              <div className="relative overflow-hidden">
-
+              {/* Image */}
+              <div className="relative overflow-hidden bg-gray-50">
                 <img
-
                   src={product.images?.[0]?.url}
-
                   alt={product.name}
-
-                  className="
-                  w-full
-                  h-80
-                  object-cover
-                  group-hover:scale-105
-                  transition-transform
-                  duration-500
-                  "
-
+                  className="h-80 w-full object-cover transition-all duration-700 ease-out group-hover:scale-105"
                 />
 
-                <span
-                  className="
-                  absolute
-                  top-4
-                  left-4
-                  bg-black
-                  text-white
-                  px-3
-                  py-1
-                  rounded-full
-                  text-xs
-                  font-semibold
-                  "
-                >
-
+                <span className="absolute top-3 left-3 flex items-center gap-1 bg-black px-2.5 py-1 text-[11px] font-medium tracking-wide text-white">
+                  <Flame size={11} />
                   Trending
-
                 </span>
 
+                {product.discount > 0 && (
+                  <span className="absolute top-3 right-3 bg-white px-2.5 py-1 text-[11px] font-medium tracking-wide text-gray-900">
+                    −{product.discount}%
+                  </span>
+                )}
               </div>
 
-              <div className="p-5">
+              {/* Details */}
+              <div className="pt-4">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="line-clamp-2 min-h-[48px] text-[15px] font-medium leading-snug text-gray-900">
+                    {product.name}
+                  </h3>
 
-                <h3 className="text-lg font-semibold truncate">
-
-                  {product.name}
-
-                </h3>
-
-                <div className="flex justify-between items-center mt-3">
-
-                  <span className="text-xl font-bold">
-
-                    ₹{product.price}
-
-                  </span>
-
-                  <span className="text-yellow-500">
-
-                    ⭐ {product.rating || 4.5}
-
-                  </span>
-
+                  <div className="mt-0.5 flex shrink-0 items-center gap-1 text-xs text-gray-500">
+                    <Star size={13} fill="currentColor" className="text-gray-800" />
+                    {product.rating || 4.5}
+                  </div>
                 </div>
 
-                {product.discount > 0 && (
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="text-lg font-semibold text-gray-900">
+                    ₹{product.price}
+                  </span>
+                </div>
 
-                  <p className="text-green-600 mt-2">
-
-                    {product.discount}% OFF
-
-                  </p>
-
-                )}
-
-                <button
-                  className="
-                  w-full
-                  mt-5
-                  py-3
-                  rounded-xl
-                  border
-                  border-black
-                  hover:bg-black
-                  hover:text-white
-                  transition
-                  "
-                >
-
-                  View Product
-
-                </button>
-
+                <span className="mt-3 block h-px w-6 bg-gray-300 transition-all duration-500 group-hover:w-12 group-hover:bg-black" />
               </div>
+            </Link>
+          ))}
+        </div>
+      )}
 
-            </div>
-
-          </Link>
-
-        ))}
-
+      {/* Mobile View All */}
+      <div className="mt-10 flex justify-center md:hidden">
+        <Link
+          to="/products"
+          className="flex items-center gap-2 border border-gray-300 px-6 py-3 text-sm font-medium text-gray-900"
+        >
+          View All Products
+          <ArrowRight size={15} />
+        </Link>
       </div>
-
     </section>
-
   );
-
 }
 
 export default Trending;

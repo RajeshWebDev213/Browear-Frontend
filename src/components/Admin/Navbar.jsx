@@ -1,47 +1,59 @@
-import { Search, Bell } from "lucide-react";
-
 import { useContext } from "react";
 
 import { AuthContext } from "../../context/AuthContext";
 
+
 function Navbar() {
 
-  const { user } = useContext(AuthContext);
+  const { user } =
+    useContext(AuthContext);
 
-  const today = new Date().toLocaleDateString(
-    "en-US",
-    {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }
-  );
+
+  const today =
+    new Date().toLocaleDateString(
+      "en-US",
+      {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    );
+
 
   return (
 
     <header
       className="
-      h-20
+      h-16
+      sm:h-20
       bg-white
       border-b
       border-gray-200
-      px-8
+      px-3
+      sm:px-5
+      lg:px-8
       flex
       items-center
       justify-between
+      gap-3
       "
     >
 
-      {/* Left */}
+      {/* =========================
+          LEFT
+/*  */}
 
-      <div>
+      <div className="min-w-0">
 
         <h2
           className="
-          text-2xl
+          text-lg
+          sm:text-xl
+          lg:text-2xl
           font-bold
           text-gray-900
+          truncate
           "
         >
 
@@ -49,11 +61,15 @@ function Navbar() {
 
         </h2>
 
+
         <p
           className="
-          text-sm
+          text-xs
+          sm:text-sm
           text-gray-500
-          mt-1
+          mt-0.5
+          sm:mt-1
+          truncate
           "
         >
 
@@ -63,155 +79,94 @@ function Navbar() {
 
       </div>
 
-      {/* Right */}
+
+      {/* =========================
+          RIGHT — PROFILE
+/*  */}
 
       <div
         className="
         flex
         items-center
-        gap-5
+        gap-2
+        sm:gap-3
+        shrink-0
         "
       >
 
-        {/* Search */}
+        {/* Avatar */}
 
         <div
           className="
-          relative
-          hidden
-          md:block
-          "
-        >
-
-          <Search
-            size={18}
-            className="
-            absolute
-            left-4
-            top-1/2
-            -translate-y-1/2
-            text-gray-400
-            "
-          />
-
-          <input
-
-            type="text"
-
-            placeholder="Search..."
-
-            className="
-            w-72
-            h-11
-            rounded-xl
-            border
-            border-gray-300
-            pl-11
-            pr-4
-            outline-none
-            focus:border-black
-            transition
-            "
-
-          />
-
-        </div>
-
-        {/* Notification */}
-
-        <button
-          className="
-          relative
-          w-11
-          h-11
-          rounded-xl
-          border
-          border-gray-300
+          w-9
+          h-9
+          sm:w-10
+          sm:h-10
+          lg:w-11
+          lg:h-11
+          rounded-full
+          bg-black
+          text-white
           flex
           items-center
           justify-center
-          hover:bg-gray-100
-          transition
+          font-semibold
+          text-sm
+          sm:text-base
+          lg:text-lg
+          shrink-0
           "
         >
 
-          <Bell size={20} />
+          {user?.fullname
+            ? user.fullname
+                .charAt(0)
+                .toUpperCase()
+            : "A"}
 
-          <span
-            className="
-            absolute
-            top-2
-            right-2
-            w-2
-            h-2
-            rounded-full
-            bg-red-500
-            "
-          />
+        </div>
 
-        </button>
 
-        {/* Profile */}
+        {/* User Info */}
 
         <div
           className="
-          flex
-          items-center
-          gap-3
+          hidden
+          md:block
+          max-w-32
+          lg:max-w-none
           "
         >
 
-          <div
+          <p
             className="
-            w-11
-            h-11
-            rounded-full
-            bg-black
-            text-white
-            flex
-            items-center
-            justify-center
             font-semibold
-            text-lg
+            text-gray-900
+            text-sm
+            lg:text-base
+            truncate
             "
           >
 
-            {user?.fullname
-              ? user.fullname.charAt(0).toUpperCase()
-              : "A"}
+            {user?.fullname ||
+              "Admin"}
 
-          </div>
+          </p>
 
-          <div
+
+          <p
             className="
-            hidden
-            md:block
+            text-xs
+            lg:text-sm
+            text-gray-500
+            truncate
             "
           >
 
-            <p
-              className="
-              font-semibold
-              text-gray-900
-              "
-            >
+            {user?.role ||
+              "Administrator"}
 
-              {user?.fullname || "Admin"}
-
-            </p>
-
-            <p
-              className="
-              text-sm
-              text-gray-500
-              "
-            >
-
-              {user?.role || "Administrator"}
-
-            </p>
-
-          </div>
+          </p>
 
         </div>
 
@@ -222,5 +177,6 @@ function Navbar() {
   );
 
 }
+
 
 export default Navbar;

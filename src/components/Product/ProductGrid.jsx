@@ -57,9 +57,7 @@ function ProductGrid({
           addToCart={addToCart}
           toggleWishlist={toggleWishlist}
           isWishlisted={wishlist.some(
-            (item) =>
-              (item._id || item.id) ===
-              (product._id || product.id)
+           item => item._id === product._id
           )}
         />
       ))}

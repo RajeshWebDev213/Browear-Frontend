@@ -1,29 +1,36 @@
+import { useContext } from "react";
+
 import { Navigate } from "react-router-dom";
 
-function AdminRoute({
+import Loader from "../components/common/Loader";
 
-  children,
+import { AuthContext } from "../context/AuthContext";
 
-}) {
+function AdminRoute({ children }) {
 
-  const token =
-    localStorage.getItem("token");
+  const {
 
-  const user = JSON.parse(
+    user,
 
-    localStorage.getItem("user")
+    loading,
 
-  );
+  } = useContext(AuthContext);
 
-  if (
+  if (loading) {
 
-    !token ||
+    return <Loader />;
 
-    user?.role !== "admin"
+  }
 
-  ) {
+  if (!user) {
 
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
+
+  }
+
+  if (user.role !== "admin") {
+
+    return <Navigate to="/" replace />;
 
   }
 

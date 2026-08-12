@@ -11,6 +11,7 @@ import {
   removeFromWishlist as removeWishlistService,
   toggleWishlist as toggleWishlistService,
 } from "../services/wishlistService";
+import { AwardIcon } from "lucide-react";
 
 export const WishlistContext = createContext();
 
@@ -36,7 +37,7 @@ export const WishlistProvider = ({
   const refreshWishlist = async () => {
 
     const token =
-      localStorage.getItem("token");
+      sessionStorage.getItem("token");
 
     if (!token) {
 
@@ -57,11 +58,9 @@ export const WishlistProvider = ({
       const data =
         await getWishlist();
 
-      setWishlist(
-        data.items ||
-        data.wishlist ||
-        data
-      );
+     setWishlist(
+  (data.wishlist || []).map(item => item.product)
+);
 
       const count =
         await getWishlistCount();
@@ -106,7 +105,7 @@ export const WishlistProvider = ({
       productId
     );
 
-    refreshWishlist();
+   await refreshWishlist();
 
   };
 
@@ -123,7 +122,7 @@ export const WishlistProvider = ({
         productId
       );
 
-      refreshWishlist();
+      await refreshWishlist();
 
     };
 
@@ -140,7 +139,7 @@ export const WishlistProvider = ({
         productId
       );
 
-      refreshWishlist();
+      await refreshWishlist();
 
     };
 
