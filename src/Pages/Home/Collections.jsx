@@ -52,7 +52,7 @@ function Collections() {
             to={item.path}
             className={`
               group relative block overflow-hidden bg-black
-              ${index === 0 ? "md:mt-0" : "md:mt-10"}
+              ${index === 0 ? "md:mt-0" : "md:mt-0"}
             `}
           >
             {/* Image */}

@@ -1,7 +1,7 @@
 import Hero from "./Hero";
 import Collections from "./Collections";
 import Trending from "./Trending";
-import BestSeller from "./BestSeller";
+// import BestSeller from "./BestSeller";
 import FiftyOff from "./FiftyOff";
 
 function Home() {
@@ -14,7 +14,7 @@ function Home() {
 
       <Trending />
 
-      <BestSeller />
+      {/* <BestSeller /> */}
 
       <FiftyOff />
 

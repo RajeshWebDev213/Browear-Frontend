@@ -14,11 +14,15 @@ function EditProduct() {
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState("");
 
+  // Keeps the original fetched values so blank fields can fall back to them on submit
+  const [originalProduct, setOriginalProduct] = useState(null);
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     category: "",
     price: "",
+    discount: "",
     stock: "",
     image: null,
   });
@@ -31,16 +35,19 @@ function EditProduct() {
     try {
       const product = await getProductById(id);
 
+      setOriginalProduct(product);
+
       setFormData({
         name: product.name,
         description: product.description,
         category: product.category,
         price: product.price,
+        discount: product.discount ?? 0,
         stock: product.stock,
         image: null,
       });
 
-      setPreview(product.image);
+      setPreview(product.images?.[0]?.url || "");
     } catch (error) {
       console.log(error);
       showError("Product not found");
@@ -60,24 +67,55 @@ function EditProduct() {
     setFormData((prev) => ({ ...prev, image: file }));
   };
 
+  // Returns the typed value if it isn't blank, otherwise the original saved value
+  const resolveValue = (current, original) => {
+    if (current === "" || current === null || current === undefined) {
+      return original;
+    }
+    return current;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name) return showError("Product name is required");
-    if (!formData.description) return showError("Description is required");
-    if (!formData.category) return showError("Category is required");
-    if (!formData.price) return showError("Price is required");
-    if (!formData.stock) return showError("Stock is required");
+    if (!originalProduct) {
+      return showError("Product data not loaded yet.");
+    }
+
+    // Only validate the discount range if the admin actually typed something in it
+    if (
+      formData.discount !== "" &&
+      (Number(formData.discount) < 0 || Number(formData.discount) > 100)
+    ) {
+      return showError("Discount must be between 0 and 100");
+    }
+
+    // Build the final payload: typed value wins, blank falls back to original
+    const finalData = {
+      name: resolveValue(formData.name?.trim(), originalProduct.name),
+      description: resolveValue(
+        formData.description?.trim(),
+        originalProduct.description
+      ),
+      category: resolveValue(formData.category, originalProduct.category),
+      price: resolveValue(formData.price, originalProduct.price),
+      discount: resolveValue(
+        formData.discount,
+        originalProduct.discount ?? 0
+      ),
+      stock: resolveValue(formData.stock, originalProduct.stock),
+    };
 
     try {
       setLoading(true);
 
       const data = new FormData();
-      data.append("name", formData.name);
-      data.append("description", formData.description);
-      data.append("category", formData.category);
-      data.append("price", formData.price);
-      data.append("stock", formData.stock);
+      data.append("name", finalData.name);
+      data.append("description", finalData.description);
+      data.append("category", finalData.category);
+      data.append("price", finalData.price);
+      data.append("discount", finalData.discount);
+      data.append("stock", finalData.stock);
 
       if (formData.image) {
         data.append("image", formData.image);
@@ -121,7 +159,8 @@ function EditProduct() {
             Edit Product
           </h1>
           <p className="mt-1 text-sm text-gray-500">
-            Update your product information.
+            Only fill in the fields you want to change — everything else
+            keeps its current value.
           </p>
         </div>
 
@@ -167,8 +206,8 @@ function EditProduct() {
             </select>
           </div>
 
-          {/* Price + Stock */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {/* Price + Discount + Stock */}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             <div>
               <label className={labelClass}>Price</label>
               <input
@@ -178,6 +217,20 @@ function EditProduct() {
                 onChange={handleChange}
                 placeholder="Price"
                 min="0"
+                className={inputClass}
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>Discount (%)</label>
+              <input
+                type="number"
+                name="discount"
+                value={formData.discount}
+                onChange={handleChange}
+                placeholder="0"
+                min="0"
+                max="100"
                 className={inputClass}
               />
             </div>

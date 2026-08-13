@@ -21,6 +21,7 @@ function AddProduct() {
     category: "",
     brand: "",
     price: "",
+    discount: "",
     stock: "",
     sizes: [],
     image: null,
@@ -47,6 +48,11 @@ function AddProduct() {
     if (!formData.category) return showError("Category is required");
     if (!formData.brand) return showError("Brand is required");
     if (!formData.price) return showError("Price is required");
+    if (
+      formData.discount &&
+      (Number(formData.discount) < 0 || Number(formData.discount) > 100)
+    )
+      return showError("Discount must be between 0 and 100");
     if (!formData.stock) return showError("Stock is required");
     if (formData.sizes.length === 0)
       return showError("Please select at least one size.");
@@ -61,6 +67,7 @@ function AddProduct() {
       data.append("category", formData.category);
       data.append("brand", formData.brand);
       data.append("price", formData.price);
+      data.append("discount", formData.discount || 0);
       data.append("stock", formData.stock);
       data.append("sizes", JSON.stringify(formData.sizes));
       data.append("image", formData.image);
@@ -203,8 +210,8 @@ function AddProduct() {
             )}
           </div>
 
-          {/* Price + Stock */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {/* Price + Discount + Stock */}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             <div>
               <label className={labelClass}>Price</label>
               <input
@@ -214,6 +221,20 @@ function AddProduct() {
                 value={formData.price}
                 onChange={handleChange}
                 min="0"
+                className={inputClass}
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>Discount (%)</label>
+              <input
+                type="number"
+                name="discount"
+                placeholder="0"
+                value={formData.discount}
+                onChange={handleChange}
+                min="0"
+                max="100"
                 className={inputClass}
               />
             </div>

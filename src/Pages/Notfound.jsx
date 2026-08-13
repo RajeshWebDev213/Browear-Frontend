@@ -20,7 +20,6 @@ function NotFound() {
 
       <div className="w-full max-w-2xl text-center">
 
-        {/* Logo */}
 
         <img
           src={brand}
@@ -28,7 +27,7 @@ function NotFound() {
           className="w-20 mx-auto mb-10"
         />
 
-        {/* Hanging tag signature element */}
+     
 
         <div className="relative inline-block mb-8">
 
@@ -46,7 +45,7 @@ function NotFound() {
             "
           >
 
-            {/* tag hole */}
+         
 
             <div className="absolute -top-[9px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white border-2 border-black" />
 
@@ -72,31 +71,6 @@ function NotFound() {
           our collections below.
         </p>
 
-        {/* Search bar — real ecommerce touch */}
-
-        <form
-          onSubmit={handleSearch}
-          className="mt-8 flex items-center max-w-md mx-auto border border-gray-300 rounded-full overflow-hidden focus-within:border-black transition"
-        >
-
-          <Search size={18} className="ml-4 text-gray-400 shrink-0" />
-
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search products..."
-            className="w-full px-3 py-3 text-sm outline-none"
-          />
-
-          <button
-            type="submit"
-            className="px-5 py-3 bg-black text-white text-sm font-medium hover:bg-zinc-900 transition"
-          >
-            Search
-          </button>
-
-        </form>
 
         {/* Category shortcuts */}
 
