@@ -53,7 +53,7 @@ import ReviewDetails from "./Pages/Admin/ReviwDetails";
 import Settings from "./Pages/Admin/Settings";
 
 // Common
-import NotFound from "./Pages/NotFound";
+import notFound from "./Pages/Notfound/Notfound";
 
 function App() {
   return (
@@ -197,7 +197,7 @@ function App() {
       </Route>
 
       {/* 404 */}
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<notFound/>} />
     </Routes>
   );
 }

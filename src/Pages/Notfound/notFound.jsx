@@ -4,7 +4,7 @@ import { ArrowLeft, Search, Shirt, Footprints, ShoppingBag } from "lucide-react"
 
 import brand from "../assets/logo/browear-1.png";
 
-function NotFound() {
+function notFound() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
@@ -135,4 +135,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export default notFound;

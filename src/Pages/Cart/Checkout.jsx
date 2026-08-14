@@ -71,7 +71,7 @@ function Checkout() {
         return;
       }
 
-      const res = await fetch("http://localhost:5000/api/orders", {
+      const res = await fetch("https://browear-backend-updated.onrender.com/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
