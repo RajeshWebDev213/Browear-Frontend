@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { CartContext } from "../../context/cartContext";
-
+import { CartContext } from "../../context/CartContext";
 import CartCard from "../../components/Cart/CartCard";
 import OrderSummary from "../../components/Cart/OrderSummary";
 
