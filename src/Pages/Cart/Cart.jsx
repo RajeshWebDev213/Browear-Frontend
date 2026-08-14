@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
-import { CartContext } from "../../context/CartContext";
+
 import CartCard from "../../components/Cart/CartCard";
 import OrderSummary from "../../components/Cart/OrderSummary";
-
+import { CartContext } from "../../context/CartContext";
 import emptyCart from "../../assets/images/cart.png";
 import { useContext } from "react";
 
