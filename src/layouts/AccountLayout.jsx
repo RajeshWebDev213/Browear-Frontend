@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-import ProfileSidebar from "../components/profile/ProfileSidebar";
-import ProfileHeader from "../components/profile/ProfileHeader";
+import ProfileSidebar from "../components/Profile/ProfileSidebar";
+import ProfileHeader from "../components/Profile/ProfileHeader";
 
 function AccountLayout() {
 
