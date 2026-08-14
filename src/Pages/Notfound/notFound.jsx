@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Search, Shirt, Footprints, ShoppingBag } from "lucide-react";
 
-import brand from "../assets/logo/browear-1.png";
+import brand from "../../assets/logo/browear-1.png"
 
 function notFound() {
   const [query, setQuery] = useState("");
