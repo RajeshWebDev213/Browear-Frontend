@@ -1,8 +1,9 @@
+
 import { useEffect, useState } from "react";
 
 import Loader from "../../components/common/Loader";
-import UsersTable from "../../components/admin/UsersTable";
-import UserStatsCard from "../../components/admin/UserStatsCard";
+import UsersTable from "../../components/Admin/UsersTable";
+import UserStatsCard from "../../components/Admin/UserStatsCard";
 
 import { getAllUsers } from "../../services/profileService";
 

@@ -1,7 +1,8 @@
+
 import { useEffect, useState } from "react";
 
 import Loader from "../../components/common/Loader";
-import OrdersTable from "../../components/admin/OrdersTable";
+import OrdersTable from "../../components/Admin/OrdersTable";
 
 import { getAllOrders } from "../../services/orderService";
 

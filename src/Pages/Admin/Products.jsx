@@ -1,10 +1,11 @@
+// Products.jsx (Pages/Admin) — fixed case
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import ProductsTable from "../../components/admin/ProductsTable";
+import ProductsTable from "../../components/Admin/ProductsTable";
 import Loader from "../../components/common/Loader";
-import DeleteProductModal from "../../components/admin/DeleteProductModal";
+import DeleteProductModal from "../../components/Admin/DeleteProductModal";
 
 import { getAllProducts, deleteProduct } from "../../services/productService";
 import { showSuccess, showError } from "../../utils/toast";

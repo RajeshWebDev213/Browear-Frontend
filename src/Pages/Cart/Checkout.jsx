@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MapPin, Truck, CheckCircle2 } from "lucide-react";
 
-import { CartContext } from "../../context/cartContext";
-import { OrdersContext } from "../../context/orderContext";
+import { CartContext } from "../../context/CartContext";
+import { OrdersContext } from "../../context/OrderContext";
 import { useContext } from "react";
 import emptyCart from "../../assets/images/cart.png";
 

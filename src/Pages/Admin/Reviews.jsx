@@ -1,7 +1,8 @@
+
 import { useEffect, useState } from "react";
 
 import Loader from "../../components/common/Loader";
-import ReviewsTable from "../../components/admin/ReviewsTable";
+import ReviewsTable from "../../components/Admin/ReviewsTable";
 
 import { getAllReviews } from "../../services/reviewService";
 

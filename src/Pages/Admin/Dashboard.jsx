@@ -1,11 +1,11 @@
 import { DollarSign, ShoppingCart, Users, Package } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import DashboardCard from "../../components/admin/DashboardCard";
-import RevenueCard from "../../components/admin/RevenueCard";
+import DashboardCard from "../../components/Admin/DashboardCard";
+import RevenueCard from "../../components/Admin/RevenueCard";
 import OrderStatusCard from "../../components/Admin/OrderSatusCard";
-import OrdersTable from "../../components/admin/OrdersTable";
-import UsersTable from "../../components/admin/UsersTable";
+import OrdersTable from "../../components/Admin/OrdersTable";
+import UsersTable from "../../components/Admin/UsersTable";
 import Loader from "../../components/common/Loader";
 
 import {
