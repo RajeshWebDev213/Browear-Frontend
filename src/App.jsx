@@ -53,7 +53,7 @@ import ReviewDetails from "./Pages/Admin/ReviwDetails";
 import Settings from "./Pages/Admin/Settings";
 
 // Common
-import notFound from "./Pages/Notfound/Notfound";
+import notFound from "./Pages/Notfound/notFound";
 
 function App() {
   return (
